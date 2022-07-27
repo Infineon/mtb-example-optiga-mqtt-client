@@ -1,0 +1,69 @@
+$(SEARCH_aws-iot-device-sdk-embedded-C)/libraries/standard/coreHTTP
+
+# Documentation
+documents
+
+# Exports, Project settings
+.mtbLaunchConfigs
+.settings
+.vscode
+
+# Not required PALs
+$(SEARCH_optiga-trust-m)/pal/NEW_PAL_TEMPLATE
+$(SEARCH_optiga-trust-m)/pal/esp32_freertos
+$(SEARCH_optiga-trust-m)/pal/libusb
+$(SEARCH_optiga-trust-m)/pal/linux
+$(SEARCH_optiga-trust-m)/pal/xmc4800
+$(SEARCH_optiga-trust-m)/pal/xmc4800_freertos
+
+$(SEARCH_cy-mbedtls-acceleration)/COMPONENT_CAT1/mbedtls_MXCRYPTO/ecdh_alt_mxcrypto.c
+$(SEARCH_cy-mbedtls-acceleration)/COMPONENT_CAT1/mbedtls_MXCRYPTO/ecdsa_alt_mxcrypto.c
+$(SEARCH_cy-mbedtls-acceleration)/COMPONENT_CAT1/mbedtls_MXCRYPTO/ecp_alt_mxcrypto.c
+$(SEARCH_cy-mbedtls-acceleration)/COMPONENT_CAT1/mbedtls_MXCRYPTO/ecp_curves_alt_mxcrypto.c
+
+# Not required Crypto midlayers
+$(SEARCH_optiga-trust-m)/pal/pal_crypt_openssl.c
+$(SEARCH_optiga-trust-m)/pal/pal_crypt_wolfssl.c
+
+# Not required executeable for tools
+$(SEARCH_optiga-trust-m)/examples/tools/protected_update_data_set
+$(SEARCH_optiga-trust-m)/examples/mbedtls_port/example/mbedtls_trustm_ecc_extended_example.c
+$(SEARCH_optiga-trust-m)/examples/mbedtls_port/example/mbedtls_trustm_rsa_example.c
+$(SEARCH_optiga-trust-m)/examples/mbedtls_port/trustm_random.c
+$(SEARCH_optiga-trust-m)/examples/utilities/authenticate_chip
+$(SEARCH_optiga-trust-m)/examples/utilities/pkcs11_trustm.c
+$(SEARCH_optiga-trust-m)/examples/utilities/trustm_chipinfo.c
+$(SEARCH_optiga-trust-m)/examples/utilities/optiga_trust.c
+$(SEARCH_optiga-trust-m)/examples/optiga_shell.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_init_deinit.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_clear_auto_state.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_ecc_generate_keypair.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_ecdh.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_ecdsa_sign.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_ecdsa_verify.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_hash.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_hkdf.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_hmac.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_random.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_rsa_decrypt.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_rsa_encrypt_message.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_rsa_encrypt_session.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_rsa_generate_keypair.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_rsa_sign.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_rsa_verify.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_symmetric_encrypt_decrypt.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_symmetric_encrypt_decrypt_ecb.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_symmetric_generate_key.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_crypt_tls_prf_sha256.c
+$(SEARCH_optiga-trust-m)/examples/optiga/usecases/example_read_coprocessor_id.c
+$(SEARCH_optiga-trust-m)/examples/optiga/usecases/example_optiga_hmac_verify_with_authorization_reference.c
+$(SEARCH_optiga-trust-m)/examples/optiga/usecases/example_pair_host_and_optiga_using_pre_shared_secret.c
+$(SEARCH_optiga-trust-m)/examples/optiga/usecases/example_optiga_hibernate_restore.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_util_protected_update.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_util_read_data.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_util_update_count.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_optiga_util_write_data.c
+$(SEARCH_optiga-trust-m)/examples/optiga/example_utilities.c
+
+# Add this line to your project if you already have mbedtls in your application
+$(SEARCH_optiga-trust-m)/externals/mbedtls
