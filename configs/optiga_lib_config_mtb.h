@@ -39,6 +39,10 @@
 #ifndef _OPTIGA_LIB_CONFIG_M_V3_H_
 #define _OPTIGA_LIB_CONFIG_M_V3_H_
 
+#include "cy_pdl.h"
+#include "cyhal.h"
+#include "cybsp.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -152,20 +156,20 @@ extern "C" {
     /** @brief OPTIGA UTIL metadata object protected update feature enable/disable macro */      
     #define EXAMPLE_OPTIGA_UTIL_PROTECTED_UPDATE_OBJECT_METADATA_ENABLED    
     
-
     /* The following GPIO settings are only ModusToolbox and specific PSoC6 family board relevant
      * If you don't have both the Reset and the VCC Power Control connected, please define
      * OPTIGA_COMMS_DEFAULT_RESET_TYPE to be 1
      * in case you have both VDD and Reset lines connected use the value 0
      * */
-    #define OPTIGA_TRUSTM_SCL        CYBSP_I2C_SCL_OPTIGA
-    #define OPTIGA_TRUSTM_SDA        CYBSP_I2C_SDA_OPTIGA
+    #define OPTIGA_TRUSTM_SCL        CYBSP_TRUSTM_I2C_SCL
+    #define OPTIGA_TRUSTM_SDA        CYBSP_TRUSTM_I2C_SDA
 #ifdef CYBSP_TRUSTM_RST
     #define OPTIGA_TRUSTM_RST        CYBSP_TRUSTM_RST
 #endif
 #ifdef CYBSP_TRUSTM_VDD
     #define OPTIGA_TRUSTM_VDD        CYBSP_TRUSTM_VDD
 #endif
+
 
 #ifdef __cplusplus
 }

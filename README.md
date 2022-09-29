@@ -4,7 +4,7 @@ This code example demonstrates the implementation of an MQTT Client using the [M
 
 [View this README on GitHub.](https://github.com/Infineon/mtb-example-optiga-mqtt-client)
 
-[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMjk4ODkiLCJTcGVjIE51bWJlciI6IjAwMi0yOTg4OSIsIkRvYyBUaXRsZSI6Ik9QVElHQeKEoiBUcnVzdCBNOiBNUVRUIENsaWVudCIsInJpZCI6Inl1c2hldiIsIkRvYyB2ZXJzaW9uIjoiMS4wLjAiLCJEb2MgTGFuZ3VhZ2UiOiJFbmdsaXNoIiwiRG9jIERpdmlzaW9uIjoiTi9BIiwiRG9jIEJVIjoiTi9BIiwiRG9jIEZhbWlseSI6Ik4vQSJ9)
+[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMjk4ODkiLCJTcGVjIE51bWJlciI6IjAwMi0yOTg4OSIsIkRvYyBUaXRsZSI6Ik9QVElHQeKEoiBUcnVzdCBNOiBNUVRUIENsaWVudCIsInJpZCI6Inl1c2hldiIsIkRvYyB2ZXJzaW9uIjoiMS4xLjAiLCJEb2MgTGFuZ3VhZ2UiOiJFbmdsaXNoIiwiRG9jIERpdmlzaW9uIjoiTi9BIiwiRG9jIEJVIjoiTi9BIiwiRG9jIEZhbWlseSI6Ik4vQSJ9)
 
 
 ## Overview
@@ -16,7 +16,7 @@ This code example demonstrates the implementation of an MQTT Client using the [M
 
 In this example, the MQTT Client RTOS task reads out a pre-provisioned X.509 certificate out of the secure element and populates the internal MQTT Client configuration to establish a connection with the configured MQTT Broker, and creates the following two tasks:
 
-- **Publisher:** Publishes messages on a topic when the user button is pressed on the kit.
+- **Publisher:** Publishes messages on a topic when the user button on the kit is pressed.
 
 - **Subscriber:** Subscribes to the same topic and controls the user LED based on the messages received from the MQTT Broker.
 
@@ -63,10 +63,10 @@ If an unexpected MQTT or Wi-Fi disconnection occurs, the application executes a 
 
 ## Supported kits (make variable 'TARGET')
 
+> **WARNING:** The `optiga-trust-m` middleware supports only BSP versions 2.x.
+
 - [OPTIGA&trade; Trust IoT security development kit](https://www.infineon.com/cms/en/product/evaluation-boards/optiga-trust-m-iot-kit/) (`CYSBSYSKIT-DEV-01`) - Default value of `TARGET`
-- [PSoC&trade; 62S2 evaluation kit](https://www.infineon.com/CY8CEVAL-062S2) (`CY8CEVAL-062S2`)
 - [PSoC&trade; 62S2 evaluation kit with the Sterling-LWB5+ M.2 radio module]() (`CY8CEVAL-062S2-LAI-4373M2`)
-- [PSoC&trade; 62S2 evaluation kit with the CYW943439M2IPA1 radio module]() (`CY8CEVAL-062S2-CYW943439M2IPA1`)
 
 ## Hardware setup
 
@@ -76,11 +76,14 @@ This example uses the board's default configuration. See the kit user guide to e
 
 Install a terminal emulator if you don't have one. Instructions in this document use [Tera Term](https://ttssh2.osdn.jp/index.html.en).
 
-This code example implements a generic MQTT Client that can connect to various MQTT Brokers. In this document, the instructions to set up and run the MQTT Client have been provided for the AWS IoT and Mosquitto MQTT Brokers for reference. If you are using this code example with a  Mosquitto Broker locally running on your computer, you need to download and install Mosquitto Broker from https://mosquitto.org/download.
+This code example implements a generic MQTT Client that can connect to various MQTT Brokers. In this document, the instructions to set up and run the MQTT Client have been provided for the AWS IoT MQTT Broker for reference.
 
 This example requires no additional software or tools if you are using the MQTT Client with a publicly hosted MQTT Broker.
 
+
 ## Using the code example
+
+> **WARNING:** Keep in mind that due to Windows [maximum path length limitation](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry), which is defined as 260 characters, the example might fail during build with an "No such file or directory" error due to many submodules added to the project. In such cases, shorten the system path of the project to a minimum; e.g., move it to a different location.
 
 Create the project and open it using one of the following:
 
@@ -90,7 +93,7 @@ Create the project and open it using one of the following:
 
 2. Pick a kit supported by the code example from the list shown in the **Project Creator - Choose Board Support Package (BSP)** dialog.
 
-   When you select a supported kit, the example is reconfigured automatically to work with the kit. To work with a different supported kit later, use the [Library Manager](https://www.cypress.com/ModusToolboxLibraryManager) to choose the BSP for the supported kit. You can use the Library Manager to select or update the BSP and firmware libraries used in this application. To access the Library Manager, click the link from the **Quick Panel**.
+   When you select a supported kit, the example is reconfigured automatically to work with the kit. To work with a different supported kit later, use the [Library Manager](https://www.infineon.com/ModusToolboxLibraryManager) to choose the BSP for the supported kit. You can use the Library Manager to select or update the BSP and firmware libraries used in this application. To access the Library Manager, click the link from the **Quick Panel**.
 
    You can also just start the application creation process again and select a different kit.
 
@@ -104,7 +107,7 @@ Create the project and open it using one of the following:
 
 6. Click **Create** to complete the application creation process.
 
-For more details, see the [Eclipse IDE for ModusToolbox&trade; software user guide](https://www.cypress.com/MTBEclipseIDEUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/ide_{version}/docs/mt_ide_user_guide.pdf*).
+For more details, see the [Eclipse IDE for ModusToolbox&trade; software user guide](https://www.infineon.com/MTBEclipseIDEUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/ide_{version}/docs/mt_ide_user_guide.pdf*).
 
 </details>
 
@@ -131,7 +134,7 @@ The following example will clone the "[Hello World](https://github.com/Infineon/
    project-creator-cli --board-id CYSBSYSKIT-DEV-01 --app-id mtb-example-psoc6-hello-world --user-app-name MyHelloWorld --target-dir "C:/mtb_projects"
    ```
 
-**Note:** The project-creator-cli tool uses the `git clone` and `make getlibs` commands to fetch the repository and import the required libraries. For details, see the "Project creator tools" section of the [ModusToolbox&trade; software user guide](https://www.cypress.com/ModusToolboxUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/docs_{version}/mtb_user_guide.pdf*).
+**Note:** The project-creator-cli tool uses the `git clone` and `make getlibs` commands to fetch the repository and import the required libraries. For details, see the "Project creator tools" section of the [ModusToolbox&trade; software user guide](https://www.infineon.com/ModusToolboxUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/docs_{version}/mtb_user_guide.pdf*).
 
 </details>
 
@@ -139,7 +142,7 @@ The following example will clone the "[Hello World](https://github.com/Infineon/
 
 Use one of the following options:
 
-- **Use the standalone [Project Creator](https://www.cypress.com/ModusToolboxProjectCreator) tool:**
+- **Use the standalone [Project Creator](https://www.infineon.com/ModusToolboxProjectCreator) tool:**
 
    1. Launch Project Creator from the Windows Start menu or from *{ModusToolbox&trade; software install directory}/tools_{version}/project-creator/project-creator.exe*.
 
@@ -159,7 +162,7 @@ Use one of the following options:
 
    3. Follow the instructions displayed in the terminal to create or import the application as an IDE project.
 
-For a list of supported IDEs and more details, see the "Exporting to IDEs" section of the [ModusToolbox&trade; software user guide](https://www.cypress.com/ModusToolboxUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/docs_{version}/mtb_user_guide.pdf*).
+For a list of supported IDEs and more details, see the "Exporting to IDEs" section of the [ModusToolbox&trade; software user guide](https://www.infineon.com/ModusToolboxUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/docs_{version}/mtb_user_guide.pdf*).
 
 </details>
 
@@ -168,7 +171,7 @@ For a list of supported IDEs and more details, see the "Exporting to IDEs" secti
 
 ### Step 1. Register your X.509 device certificate at AWS IoT
 
-1. Set up the MQTT device (also known as a *Thing*) in the AWS IoT Core as described in the [Getting started with AWS IoT tutorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-gs.html). Do not create a client certificate or a corresponding private key because they will be provided by the secure element.
+1. Set up the MQTT device (also known as a *Thing*) in the AWS IoT Core as described in the [Getting started with AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/iot-gs.html) tutorial. Do not create a client certificate or a corresponding private key because they will be provided by the secure element.
 
     **Note:** While setting up your device, ensure that the policy associated with this device permits all MQTT operations (*iot:Connect*, *iot:Publish*, *iot:Receive*, and *iot:Subscribe*) for the resource used by this device. For testing purposes, it is recommended to have the following policy document which allows all *MQTT Policy Actions* on all *Amazon Resource Names (ARNs)*.
     ```
@@ -233,6 +236,7 @@ For a list of supported IDEs and more details, see the "Exporting to IDEs" secti
     9. Click **Actions** and then click **Attach thing**.
 
     10. On the **Attach things to certificate(s)** window, select the Thing name and click **Attach**.
+
 
 ### Step 2. Configure the application
 
@@ -336,9 +340,10 @@ You can individually verify the publish and subscribe functionalities of the MQT
 
 ## Debugging
 
-You can debug the example to step through the code. In the IDE, use the **\<Application Name> Debug (KitProg3_MiniProg4)** configuration in the **Quick Panel**. For more details, see the "Program and debug" section in the [Eclipse IDE for ModusToolbox User Guide](https://www.cypress.com/MTBEclipseIDEUserGuide).
+You can debug the example to step through the code. In the IDE, use the **\<Application Name> Debug (KitProg3_MiniProg4)** configuration in the **Quick Panel**. For more details, see the "Program and debug" section in the [Eclipse IDE for ModusToolbox User Guide](https://www.infineon.com/MTBEclipseIDEUserGuide).
 
-**Note:** **(Only while debugging)** On the CM4 CPU, some code in `main()` may execute before the debugger halts at the beginning of `main()`. This means that some code executes twice - once before the debugger stops execution, and again after the debugger resets the program counter to the beginning of `main()`. See [KBA231071](https://community.cypress.com/docs/DOC-21143) to learn about this and for the workaround.
+**Note:** **(Only while debugging)** On the CM4 CPU, some code in `main()` may execute before the debugger halts at the beginning of `main()`. This means that some code executes twice - once before the debugger stops execution, and again after the debugger resets the program counter to the beginning of `main()`. See [KBA231071](https://community.infineon.com/docs/DOC-21143) to learn about this and for the workaround.
+
 
 ## Design and implementation
 
@@ -363,9 +368,9 @@ The OPTIGA&trade; Trust task does the following:
 
 The MQTT Client task does the following:
 
-1. Initializes the Wi-Fi Connection Manager (WCM) and connects to a Wi-Fi access point (AP) using the Wi-Fi network credentials that are configured in *wifi_config.h*.
+1. Initializes the Wi-Fi Connection Manager (WCM) and connects to a Wi-Fi access point (AP) using the Wi-Fi network credentials that are configured in *wifi_config.h*
 
-2. Upon a successful Wi-Fi connection, the task initializes the MQTT library and establishes a connection with the MQTT Broker/Server.
+2. Upon a successful Wi-Fi connection, initializes the MQTT library and establishes a connection with the MQTT Broker/Server
 
 The MQTT connection is configured to be secure by default; the secure connection requires a client certificate, a private key, and the Root CA certificate of the MQTT Broker that are configured in *mqtt_client_config.h*.
 
@@ -378,6 +383,7 @@ The Publisher task sets up the user button GPIO and configures an interrupt for 
 An MQTT event callback function `mqtt_event_callback()` is invoked by the MQTT library for events such as MQTT disconnection and incoming MQTT subscription messages from the MQTT Broker. In the case of an MQTT disconnection, the MQTT Client task is informed about the disconnection using a message queue. When an MQTT subscription message is received, the subscriber callback function implemented in *subscriber_task.c* is invoked to handle the incoming MQTT message.
 
 The MQTT Client task handles unexpected disconnections in the MQTT or Wi-Fi connections by initiating reconnection to restore the Wi-Fi and MQTT connections. Upon failure, the Publisher and Subscriber tasks are deleted, cleanup operations of various libraries are performed, and then the MQTT client task is terminated.
+
 
 ## Enabling the OPTIGA&trade; Trust library
 
@@ -420,7 +426,7 @@ Immediately after the secure element is initialized, you might need to extract t
 
 #### mbed TLS configuration
 
-For a successful TLS communication, make sure that only supported handshake methods are selected in you mbed TLS configuration file.
+For a successful TLS communication, make sure that only supported handshake methods are selected in your mbed TLS configuration file.
 
 To do this, do **one** of the following:
 
@@ -449,7 +455,7 @@ Ensure that your mbed TLS configuration file has the following macros defined:
 - `MBEDTLS_ECDH_COMPUTE_SHARED_ALT`
 - `MBEDTLS_ECDSA_GENKEY_ALT`
 
-In addition to these macros, ensure that your build includes the `$(optiga-trust-m)/examples/mbedtls_port` files.
+In addition to these macros, ensure that your build includes the *$(optiga-trust-m)/examples/mbedtls_port* files.
 
 
 ### Configuring the MQTT Client
@@ -474,7 +480,7 @@ In addition to these macros, ensure that your build includes the `$(optiga-trust
 | `ROOT_CA_CERTIFICATE`      |  Root CA certificate of the MQTT Broker |
 | **MQTT Message Configurations**    |  In *configs/mqtt_client_config.h*  |
 | `MQTT_PUB_TOPIC`           | MQTT topic to which the messages are published by the Publisher task to the MQTT Broker    |
-| `MQTT_SUB_TOPIC`           | MQTT topic to which the Subscriber task subscribes to. The MQTT Broker sends the messages to the Subscriber that are published in this topic (or equivalent topic).  |
+| `MQTT_SUB_TOPIC`           | MQTT topic to which the Subscriber task subscribes. The MQTT Broker sends the messages to the Subscriber that are published in this topic (or equivalent topic).  |
 | `MQTT_MESSAGES_QOS`        | Quality of Service (QoS) level to be used by the Publisher and Subscriber. Valid choices are `0`, `1`, and `2`.  |
 | `ENABLE_LWT_MESSAGE`       | Set this macro to `1` if you want to use the 'Last Will and Testament (LWT)' option; else `0`. LWT is an MQTT message that will be published by the MQTT Broker on the specified topic if the MQTT connection is unexpectedly closed. This configuration is sent to the MQTT Broker during MQTT connect operation; the MQTT Broker will publish the Will message on the Will topic when it recognizes an unexpected disconnection from the client. |
 | `MQTT_WILL_TOPIC_NAME` <br> `MQTT_WILL_MESSAGE`   | MQTT topic and message for the LWT option described above. These configurations are applicable only when `ENABLE_LWT_MESSAGE` is set to `1`.  |
@@ -482,9 +488,9 @@ In addition to these macros, ensure that your build includes the `$(optiga-trust
 | **Other MQTT Client configurations**    |  In *configs/mqtt_client_config.h*  |
 | `GENERATE_UNIQUE_CLIENT_ID`   | Every active MQTT connection must have a unique client identifier. If this macro is set to `1`, the device will generate a unique client identifier by appending a timestamp to the string specified by the `MQTT_CLIENT_IDENTIFIER` macro. This feature is useful if you are using the same code on multiple kits simultaneously.   |
 | `MQTT_CLIENT_IDENTIFIER`     | Client identifier (client ID) string to be used during an MQTT connection. If `GENERATE_UNIQUE_CLIENT_ID` is set to `1`, a timestamp is appended to this macro value and used as the client ID; else, the value specified for this macro is directly used as the client ID.   |
-| `MQTT_CLIENT_IDENTIFIER_MAX_LEN`   | Longest client identifier that an MQTT Server must accept (as defined by the MQTT 3.1.1 spec) is 23 characters. However, some MQTT Brokers support longer client IDs. Configure this macro as per the MQTT Broker specification.  |
+| `MQTT_CLIENT_IDENTIFIER_MAX_LEN`   | The longest client identifier that an MQTT Server must accept (as defined by the MQTT 3.1.1 spec) is 23 characters. However, some MQTT Brokers support longer client IDs. Configure this macro as per the MQTT Broker specification.  |
 | `MQTT_TIMEOUT_MS`            | Timeout in milliseconds for MQTT operations in this example   |
-| `MQTT_KEEP_ALIVE_SECONDS`    | Keepalive interval in seconds used for MQTT ping request   |
+| `MQTT_KEEP_ALIVE_SECONDS`    | Keepalive interval in seconds used for the MQTT ping request   |
 | `MQTT_ALPN_PROTOCOL_NAME`   | Application Layer Protocol Negotiation (ALPN) protocol name to be used that is supported by the MQTT Broker in use. Note that this is an optional macro for most of the use cases. <br>Per IANA, the port numbers assigned for the MQTT protocol are 1883 for non-secure connections and 8883 for secure connections. Some applications may need to use other ports for MQTT such as port 443 (which is reserved for HTTPS). ALPN is an extension for TLS that allows many protocols to be used over a secure connection.     |
 | `MQTT_SNI_HOSTNAME`   | Server Name Indication (SNI) host name to be used during a TLS connection as specified by the MQTT Broker. <br>SNI is an extension to the TLS protocol. As required by some MQTT Brokers, SNI typically includes the hostname in the "Client Hello" message sent during a TLS handshake.     |
 | `MQTT_NETWORK_BUFFER_SIZE`   | Size of the network buffer  allocated for sending and receiving MQTT packets over the network. Note that the minimum buffer size is defined by the `CY_MQTT_MIN_NETWORK_BUFFER_SIZE` macro in the MQTT library.  |
@@ -528,9 +534,10 @@ For PSoC&trade; 6 MCU devices, see [How to design with PSoC&trade; 6 MCU – KBA
 
 Document title: *CE229889* – *OPTIGA™ Trust M: MQTT Client*
 
-| Version | Description of change |
-| ------- | --------------------- |
-| 1.0.0   | New code example      |
+| Version | Description of change                          |
+| ------- | ---------------------------------------------- |
+| 1.0.0   | New code example                               |
+| 1.1.0   | Fix 62S2 boards build and minor README updates |
 ------
 
 All other trademarks or registered trademarks referenced herein are the property of their respective owners.
