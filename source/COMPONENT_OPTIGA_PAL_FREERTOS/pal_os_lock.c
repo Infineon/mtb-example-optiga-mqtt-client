@@ -1,7 +1,9 @@
 /******************************************************************************
-* File Name:   publisher_task.h
+* File Name:   pal_os_lock.c
 *
-* Description: This file is the public interface of publisher_task.c
+* Description: This file contains part of the Platform Abstraction Layer.
+*              This is a platform specific file. The function here are not 
+*              really used by the host library (mw) itself
 *
 * Related Document: See README.md
 *
@@ -39,49 +41,76 @@
 * so agrees to indemnify Cypress against all liability.
 *******************************************************************************/
 
-
-#ifndef PUBLISHER_TASK_H_
-#define PUBLISHER_TASK_H_
+/*******************************************************************************
+ * Header file includes
+ ******************************************************************************/
+#include "optiga/pal/pal_os_lock.h"
 
 #include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
+#include "semphr.h"
 
 /*******************************************************************************
-* Macros
-********************************************************************************/
-/* Task parameters for Button Task. */
-#define PUBLISHER_TASK_PRIORITY               (2)
-#define PUBLISHER_TASK_STACK_SIZE             (1024 * 1)
+ * Global Variables
+ ******************************************************************************/
+SemaphoreHandle_t xLockSemaphoreHandle;
+
+volatile uint8_t first_call_flag = 1;
 
 /*******************************************************************************
-* Global Variables
-********************************************************************************/
-/* Commands for the Publisher Task. */
-typedef enum
+ * Function Definitions
+ ******************************************************************************/
+void _lock_init(pal_os_lock_t * p_lock)
 {
-    PUBLISHER_INIT,
-    PUBLISHER_DEINIT,
-    PUBLISH_MQTT_MSG
-} publisher_cmd_t;
+    xLockSemaphoreHandle = xSemaphoreCreateBinary();
+    pal_os_lock_release(p_lock);
+}
 
-/* Struct to be passed via the publisher task queue */
-typedef struct{
-    publisher_cmd_t cmd;
-    char *data;
-} publisher_data_t;
+void pal_os_lock_create(pal_os_lock_t * p_lock, uint8_t lock_type)
+{
+    p_lock->type = lock_type;
+    p_lock->lock = 0;
+}
 
-/*******************************************************************************
-* Extern Variables
-********************************************************************************/
-extern TaskHandle_t publisher_task_handle;
-extern QueueHandle_t publisher_task_q;
+//lint --e{715} suppress "p_lock is not used here as it is placeholder for future."
+//lint --e{818} suppress "Not declared as pointer as nothing needs to be updated in the pointer."
+void pal_os_lock_destroy(pal_os_lock_t * p_lock)
+{
 
-/*******************************************************************************
-* Function Prototypes
-********************************************************************************/
-void publisher_task(void *pvParameters);
+}
 
-#endif /* PUBLISHER_TASK_H_ */
 
-/* [] END OF FILE */
+pal_status_t pal_os_lock_acquire(pal_os_lock_t * p_lock)
+{
+    (void) p_lock;
+    vPortEnterCritical();
+    if (first_call_flag)
+    {
+        _lock_init(p_lock);
+        first_call_flag = 0;
+    }
+    vPortExitCritical();
+
+    if ( xSemaphoreTake(xLockSemaphoreHandle, portMAX_DELAY) == pdTRUE )
+        return PAL_STATUS_SUCCESS;
+    else {
+        return PAL_STATUS_FAILURE;
+    }
+}
+
+void pal_os_lock_release(pal_os_lock_t * p_lock)
+{
+    (void) p_lock;
+
+    xSemaphoreGive(xLockSemaphoreHandle);
+}
+
+void pal_os_lock_enter_critical_section()
+{
+    vPortEnterCritical();
+}
+
+void pal_os_lock_exit_critical_section()
+{
+    vPortExitCritical();
+}
+

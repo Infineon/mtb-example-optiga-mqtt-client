@@ -8,7 +8,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2021, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2023, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -40,16 +40,10 @@
 * so agrees to indemnify Cypress against all liability.
 *******************************************************************************/
 
+
 #include <stdio.h>
 #include "mqtt_client_config.h"
 #include "cy_mqtt_api.h"
-
-#include "optiga_trust_helpers.h"
-
-/* We don't use CLIENT_CERTIFICATE memory but instead allocate a buffer and
- * populate it with teh certificate form the Secure Element */
-char CERTIFICATE[1200];
-uint16_t CERTIFICATE_SIZE = 1200;
 
 /******************************************************************************
 * Global Variables
@@ -122,7 +116,7 @@ cy_awsport_ssl_credentials_t *security_info = &credentials;
 
 #else
 /* Pointer to the security details of the MQTT connection. */
-struct cy_awsport_ssl_credentials_t *security_info = NULL;
+cy_awsport_ssl_credentials_t *security_info = NULL;
 #endif /* #if (MQTT_SECURE_CONNECTION) */
 
 #if ENABLE_LWT_MESSAGE
@@ -164,16 +158,5 @@ cy_mqtt_connect_info_t connection_info =
     #error "Invalid QoS setting! MQTT_MESSAGES_QOS must be either 0 or 1."
 #endif
 
-void use_optiga_certificate(void)
-{
-    /* This is the place where the certificate is initialized. This is a function
-     * which will allow to read it out and populate internal mbedtls settings wit it*/
-    read_certificate_from_optiga(0xe0e0, CERTIFICATE, &CERTIFICATE_SIZE);
-    printf("Your certificate is:\n%s\n",CERTIFICATE);
-#if (MQTT_SECURE_CONNECTION)
-    security_info->client_cert = (const char *)CERTIFICATE;
-    security_info->client_cert_size = (size_t)CERTIFICATE_SIZE;
-#endif
-}
 
 /* [] END OF FILE */

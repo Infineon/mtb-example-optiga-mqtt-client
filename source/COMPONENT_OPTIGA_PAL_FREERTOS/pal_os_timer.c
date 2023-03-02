@@ -1,7 +1,10 @@
 /******************************************************************************
-* File Name:   publisher_task.h
+* File Name:   pal_os_timer.c
 *
-* Description: This file is the public interface of publisher_task.c
+* Description: This file contains part of the Platform Abstraction Layer.
+*              This is a platform specific file and shall be changed in case
+*              base board is changed. this file shall implement only functions
+*              which can return timestamps
 *
 * Related Document: See README.md
 *
@@ -39,49 +42,51 @@
 * so agrees to indemnify Cypress against all liability.
 *******************************************************************************/
 
-
-#ifndef PUBLISHER_TASK_H_
-#define PUBLISHER_TASK_H_
-
+/*******************************************************************************
+ * Header file includes
+ ******************************************************************************/
+#include "optiga/pal/pal_os_timer.h"
 #include "FreeRTOS.h"
 #include "task.h"
-#include "queue.h"
+#include "stdio.h"
 
 /*******************************************************************************
-* Macros
-********************************************************************************/
-/* Task parameters for Button Task. */
-#define PUBLISHER_TASK_PRIORITY               (2)
-#define PUBLISHER_TASK_STACK_SIZE             (1024 * 1)
-
+ * Macros
+ ******************************************************************************/
+ 
 /*******************************************************************************
-* Global Variables
-********************************************************************************/
-/* Commands for the Publisher Task. */
-typedef enum
+ * Function Definitions
+ ******************************************************************************/
+
+uint32_t pal_os_timer_get_time_in_microseconds(void)
 {
-    PUBLISHER_INIT,
-    PUBLISHER_DEINIT,
-    PUBLISH_MQTT_MSG
-} publisher_cmd_t;
+    // !!!OPTIGA_LIB_PORTING_REQUIRED
+    // This API is needed to support optiga cmd scheduler.
+    static uint32_t count = 0;
+    // The implementation must ensure that every invocation of this API returns a unique value.
+    return (count++);
+}
 
-/* Struct to be passed via the publisher task queue */
-typedef struct{
-    publisher_cmd_t cmd;
-    char *data;
-} publisher_data_t;
+/**
+* Get the current time in milliseconds<br>
+*
+*
+* \retval  uint32_t time in milliseconds
+*/
+uint32_t pal_os_timer_get_time_in_milliseconds(void)
+{
+    return xTaskGetTickCount();
+}
 
-/*******************************************************************************
-* Extern Variables
-********************************************************************************/
-extern TaskHandle_t publisher_task_handle;
-extern QueueHandle_t publisher_task_q;
+/**
+* Waits or delays until the given milliseconds time
+* 
+* \param[in] milliseconds Delay value in milliseconds
+*
+*/
+void pal_os_timer_delay_in_milliseconds(uint16_t milliseconds)
+{
+    const TickType_t xDelay = milliseconds / portTICK_PERIOD_MS;
+    vTaskDelay( xDelay );
+}
 
-/*******************************************************************************
-* Function Prototypes
-********************************************************************************/
-void publisher_task(void *pvParameters);
-
-#endif /* PUBLISHER_TASK_H_ */
-
-/* [] END OF FILE */

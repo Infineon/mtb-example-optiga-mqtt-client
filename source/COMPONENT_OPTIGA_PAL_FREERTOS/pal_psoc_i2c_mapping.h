@@ -1,7 +1,9 @@
 /******************************************************************************
-* File Name:   publisher_task.h
+* File Name:   pal_psoc_i2c_mapping.h
 *
-* Description: This file is the public interface of publisher_task.c
+* Description: This file contains part of the Platform Abstraction Layer.
+*              This is a platform specific file and shall be changed in case
+*              base board is changed
 *
 * Related Document: See README.md
 *
@@ -39,49 +41,30 @@
 * so agrees to indemnify Cypress against all liability.
 *******************************************************************************/
 
+#ifndef PAL_PSOC_I2C_MAPPING
+#define PAL_PSOC_I2C_MAPPING
 
-#ifndef PUBLISHER_TASK_H_
-#define PUBLISHER_TASK_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
-
-/*******************************************************************************
-* Macros
-********************************************************************************/
-/* Task parameters for Button Task. */
-#define PUBLISHER_TASK_PRIORITY               (2)
-#define PUBLISHER_TASK_STACK_SIZE             (1024 * 1)
-
-/*******************************************************************************
-* Global Variables
-********************************************************************************/
-/* Commands for the Publisher Task. */
-typedef enum
+#include "pal.h"
+#include "cyhal_i2c.h"
+/**
+ * \brief Structure defines PSOC6 gpio pin configuration.
+ */
+typedef struct pal_psoc_i2c
 {
-    PUBLISHER_INIT,
-    PUBLISHER_DEINIT,
-    PUBLISH_MQTT_MSG
-} publisher_cmd_t;
+    cyhal_i2c_t *     i2c_master_channel;
+    cyhal_gpio_t      sda;
+    cyhal_gpio_t      scl;
+}   pal_psoc_i2c_t;
 
-/* Struct to be passed via the publisher task queue */
-typedef struct{
-    publisher_cmd_t cmd;
-    char *data;
-} publisher_data_t;
 
-/*******************************************************************************
-* Extern Variables
-********************************************************************************/
-extern TaskHandle_t publisher_task_handle;
-extern QueueHandle_t publisher_task_q;
+#ifdef __cplusplus
+}
+#endif
 
-/*******************************************************************************
-* Function Prototypes
-********************************************************************************/
-void publisher_task(void *pvParameters);
+#endif /* PAL_PSOC_I2C_MAPPING */
 
-#endif /* PUBLISHER_TASK_H_ */
 
-/* [] END OF FILE */

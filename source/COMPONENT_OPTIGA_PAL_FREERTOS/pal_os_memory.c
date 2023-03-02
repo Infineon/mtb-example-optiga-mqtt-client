@@ -1,7 +1,9 @@
 /******************************************************************************
-* File Name:   publisher_task.h
+* File Name:   pal_os_memory.c
 *
-* Description: This file is the public interface of publisher_task.c
+* Description: This file contains part of the Platform Abstraction Layer.
+*              This is a platform specific file, in case you have a different
+*              memmory allocation functions implement them here.
 *
 * Related Document: See README.md
 *
@@ -39,49 +41,36 @@
 * so agrees to indemnify Cypress against all liability.
 *******************************************************************************/
 
-
-#ifndef PUBLISHER_TASK_H_
-#define PUBLISHER_TASK_H_
-
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
+/*******************************************************************************
+ * Header file includes
+ ******************************************************************************/
+#include "optiga/pal/pal_os_memory.h"
 
 /*******************************************************************************
-* Macros
-********************************************************************************/
-/* Task parameters for Button Task. */
-#define PUBLISHER_TASK_PRIORITY               (2)
-#define PUBLISHER_TASK_STACK_SIZE             (1024 * 1)
-
-/*******************************************************************************
-* Global Variables
-********************************************************************************/
-/* Commands for the Publisher Task. */
-typedef enum
+ * Function Definitions
+ ******************************************************************************/
+void * pal_os_malloc(uint32_t block_size)
 {
-    PUBLISHER_INIT,
-    PUBLISHER_DEINIT,
-    PUBLISH_MQTT_MSG
-} publisher_cmd_t;
+    return (malloc(block_size));
+}
 
-/* Struct to be passed via the publisher task queue */
-typedef struct{
-    publisher_cmd_t cmd;
-    char *data;
-} publisher_data_t;
+void * pal_os_calloc(uint32_t number_of_blocks , uint32_t block_size)
+{
+    return (calloc(number_of_blocks, block_size));
+}
 
-/*******************************************************************************
-* Extern Variables
-********************************************************************************/
-extern TaskHandle_t publisher_task_handle;
-extern QueueHandle_t publisher_task_q;
+void pal_os_free(void * p_block)
+{
+    free(p_block);
+}
 
-/*******************************************************************************
-* Function Prototypes
-********************************************************************************/
-void publisher_task(void *pvParameters);
+void pal_os_memcpy(void * p_destination, const void * p_source, uint32_t size)
+{
+    memcpy(p_destination, p_source, size);
+}
 
-#endif /* PUBLISHER_TASK_H_ */
+void pal_os_memset(void * p_buffer, uint32_t value, uint32_t size)
+{
+    memset(p_buffer, (int32_t)value, size);
+}
 
-/* [] END OF FILE */

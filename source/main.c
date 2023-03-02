@@ -7,7 +7,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2021, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2023, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -39,9 +39,12 @@
 * so agrees to indemnify Cypress against all liability.
 *******************************************************************************/
 
-/* Header file includes */
+/*******************************************************************************
+ * Header file includes
+ ******************************************************************************/
 #include "cyhal.h"
 #include "cybsp.h"
+#include "cy_log.h"
 #include "cy_retarget_io.h"
 #include "mqtt_task.h"
 #include "FreeRTOS.h"
@@ -49,7 +52,7 @@
 
 #include "optiga/pal/pal_os_event.h"
 #include "optiga/pal/pal_i2c.h"
-#include "optiga_trust.h"
+#include "optiga_trust_helpers.h"
 
 /******************************************************************************
 * Global Variables
@@ -60,14 +63,6 @@ volatile int uxTopUsedPriority;
 /* Extract the certificate and use it for the actual communication */
 extern void use_optiga_certificate(void);
 
-/* This is a place from which we can poll the status of operation */
-void vApplicationTickHook( void );
-
-
-void vApplicationTickHook( void )
-{
-    pal_os_event_trigger_registered_callback();
-}
 
 /******************************************************************************
  * Function Name: optiga_client_task
@@ -86,10 +81,15 @@ void vApplicationTickHook( void )
 
 void optiga_client_task(void *pvParameters)
 {
+    char optiga_cert_pem[1024];
+    uint16_t optiga_cert_pem_size = 1024;
+
     printf("\x1b[2J\x1b[;H");
-    pal_i2c_init(NULL);
     optiga_trust_init();
-    use_optiga_certificate();
+        /* This is the place where the certificate is initialized. This is a function
+     * which will allow to read it out and populate internal mbedtls settings wit it*/
+    read_certificate_from_optiga(0xe0e0, optiga_cert_pem, &optiga_cert_pem_size);
+    printf("Your certificate is:\n%s\n",optiga_cert_pem);
 
     /* \x1b[2J\x1b[;H - ANSI ESC sequence to clear screen. */
     printf("===============================================================\n");
@@ -102,6 +102,29 @@ void optiga_client_task(void *pvParameters)
 
     while(1);
 }
+
+#ifdef ENABLE_SECURE_SOCKETS_LOGS
+ int app_log_output_callback(CY_LOG_FACILITY_T facility, CY_LOG_LEVEL_T level, char *logmsg)
+ {
+     (void)facility;     // Can be used to decide to reduce output or send output to remote logging
+     (void)level;        // Can be used to decide to reduce output, although the output has already been
+                         // limited by the log routines
+ 
+     return printf( "%s\n", logmsg);   // print directly to console
+ }
+ 
+/*
+  Log time callback - get the current time for the log message timestamp in millseconds
+ */
+ cy_rslt_t app_log_time(uint32_t* time)
+ {
+     if (time != NULL)
+     {
+         *time =  xTaskGetTickCount(); // get system time (in milliseconds)
+     }
+     return CY_RSLT_SUCCESS;
+ }
+#endif
 
 /******************************************************************************
  * Function Name: main
@@ -133,6 +156,21 @@ int main()
 
     /* Enable global interrupts. */
     __enable_irq();
+
+#ifdef ENABLE_SECURE_SOCKETS_LOGS
+    /* 
+        This function is required only if there are some problems with the 
+        secure sockets (pkcs11 interface to the optiga chip) and you would
+        like to understand better what is happening. Additionally add the
+        following Macros for the Makefile list of DEFINES
+        CY_SECURE_SOCKETS_PKCS_SUPPORT MBEDTLS_VERBOSE=4
+    */
+    cy_rslt_t rs = cy_log_init(CY_LOG_MAX, app_log_output_callback, app_log_time);
+    if (rs != CY_RSLT_SUCCESS)
+    {
+        printf("cy_log_init() FAILED %ld\n", result);
+    }
+#endif    
 
     /* Initialize retarget-io to use the debug UART port. */
     cy_retarget_io_init(CYBSP_DEBUG_UART_TX, CYBSP_DEBUG_UART_RX,

@@ -1,7 +1,9 @@
 /******************************************************************************
-* File Name:   publisher_task.h
+* File Name:   pal_i2c.c
 *
-* Description: This file is the public interface of publisher_task.c
+* Description: This file contains part of the Platform Abstraction Layer.
+*              This is a platform specific file. This file implements 
+*              the platform abstraction layer APIs.
 *
 * Related Document: See README.md
 *
@@ -38,50 +40,50 @@
 * of such system or application assumes all risk of such use and in doing
 * so agrees to indemnify Cypress against all liability.
 *******************************************************************************/
-
-
-#ifndef PUBLISHER_TASK_H_
-#define PUBLISHER_TASK_H_
-
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
+/*******************************************************************************
+ * Header file includes
+ ******************************************************************************/
+#include "optiga/pal/pal.h"
+#include "optiga/pal/pal_gpio.h"
+#include "optiga/pal/pal_i2c.h"
+#include "optiga/pal/pal_os_event.h"
+#include "optiga/pal/pal_os_timer.h"
+#include "pal_psoc_gpio_mapping.h"
+#include "optiga_lib_config.h"
 
 /*******************************************************************************
-* Macros
-********************************************************************************/
-/* Task parameters for Button Task. */
-#define PUBLISHER_TASK_PRIORITY               (2)
-#define PUBLISHER_TASK_STACK_SIZE             (1024 * 1)
+ * Global variables
+ ******************************************************************************/
+#ifdef OPTIGA_TRUSTM_VDD
+extern pal_gpio_t optiga_vdd_0;
+#endif
+
+#ifdef OPTIGA_TRUSTM_RST
+extern pal_gpio_t optiga_reset_0;
+#endif
 
 /*******************************************************************************
-* Global Variables
-********************************************************************************/
-/* Commands for the Publisher Task. */
-typedef enum
+ * Function Definitions
+ ******************************************************************************/
+pal_status_t pal_init(void)
 {
-    PUBLISHER_INIT,
-    PUBLISHER_DEINIT,
-    PUBLISH_MQTT_MSG
-} publisher_cmd_t;
+    // This function call is used to create a semaphore outside of the ISR
+    pal_i2c_init(NULL);
 
-/* Struct to be passed via the publisher task queue */
-typedef struct{
-    publisher_cmd_t cmd;
-    char *data;
-} publisher_data_t;
+    #ifdef OPTIGA_TRUSTM_VDD
+    pal_gpio_init(&optiga_vdd_0);
+    #endif
 
-/*******************************************************************************
-* Extern Variables
-********************************************************************************/
-extern TaskHandle_t publisher_task_handle;
-extern QueueHandle_t publisher_task_q;
+    #ifdef OPTIGA_TRUSTM_RST
+    pal_gpio_init(&optiga_reset_0);
+    #endif
+    return PAL_STATUS_SUCCESS;
+}
 
-/*******************************************************************************
-* Function Prototypes
-********************************************************************************/
-void publisher_task(void *pvParameters);
 
-#endif /* PUBLISHER_TASK_H_ */
-
-/* [] END OF FILE */
+pal_status_t pal_deinit(void)
+{
+    // This function call is used to destroy a semaphore outside of the ISR
+    pal_i2c_deinit(NULL);
+    return PAL_STATUS_SUCCESS;
+}

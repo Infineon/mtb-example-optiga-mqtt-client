@@ -8,7 +8,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2021, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2023, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -164,23 +164,6 @@
 
 
 /**************** MQTT CLIENT CERTIFICATE CONFIGURATION MACROS ****************/
-
-/* Configure the below credentials in case of a secure MQTT connection. */
-/* PEM-encoded client certificate */
-#define CLIENT_CERTIFICATE      \
-"-----BEGIN CERTIFICATE-----\n" \
-"........base64 data........\n" \
-"-----END CERTIFICATE-----"
-
-/* PEM-encoded client private key */
-/* This key is not used by the application and used to calm down
- * the mbedtls*/
-#define CLIENT_PRIVATE_KEY          \
-"-----BEGIN EC PRIVATE KEY-----\n" \
-"MHcCAQEEIIGm2Ma8d7qLDqCSQ8aXn6Quvnu56EdBh5okuSlnG67ZoAoGCCqGSM49\n" \
-"AwEHoUQDQgAEwbCYk6G3fWQYzTbdmcJ7C+Zudz6VGt1Uskf2lCWcn/7x4LRZdS5t\n" \
-"rQ0EI1fNGzpZyfQgpVTv26AnlqqumIPzhw==\n" \
-"-----END EC PRIVATE KEY-----"
 
 /* PEM-encoded Root CA certificate 
  * This is an ECC NIST P256 Amazon Root CA3 certificate, as this setup

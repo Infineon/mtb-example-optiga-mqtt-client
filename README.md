@@ -1,13 +1,7 @@
-# OPTIGA™ Trust M: MQTT Client
+# OPTIGA&trade; Trust M: MQTT Client
 
 This code example demonstrates the implementation of an MQTT Client using the [ModusToolbox&trade; MQTT Client library](https://github.com/Infineon/mqtt). The library uses the AWS IoT Device SDK MQTT Client library that includes an MQTT 3.1.1 Client and OPTIGA&trade; Trust M secure element.
 
-[View this README on GitHub.](https://github.com/Infineon/mtb-example-optiga-mqtt-client)
-
-[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMjk4ODkiLCJTcGVjIE51bWJlciI6IjAwMi0yOTg4OSIsIkRvYyBUaXRsZSI6Ik9QVElHQeKEoiBUcnVzdCBNOiBNUVRUIENsaWVudCIsInJpZCI6Inl1c2hldiIsIkRvYyB2ZXJzaW9uIjoiMS4xLjAiLCJEb2MgTGFuZ3VhZ2UiOiJFbmdsaXNoIiwiRG9jIERpdmlzaW9uIjoiTi9BIiwiRG9jIEJVIjoiTi9BIiwiRG9jIEZhbWlseSI6Ik4vQSJ9)
-
-
-## Overview
 
 **Figure 1. Connection between PSoC&trade; 6 host MCU and OPTIGA&trade; Trust M**
 
@@ -26,47 +20,38 @@ If an unexpected MQTT or Wi-Fi disconnection occurs, the application executes a 
 
 ![](images/mqtt_optiga_trust_m_detailed.png)
 
+[View this README on GitHub.](https://github.com/Infineon/mtb-example-optiga-mqtt-client)
 
-### Sequence of operation
-
-1. The user button is pressed.
-
-2. The GPIO interrupt service routine (ISR) notifies the Publisher task.
-
-3. The Publisher task publishes a message on a topic.
-
-4. The MQTT Broker sends back the message to the MQTT Client because it is also subscribed to the same topic.
-
-5. When the message is received, the Subscriber task turns the LED ON or OFF. As a result, the user LED toggles every time the user presses the button.
+[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzM3MzYiLCJTcGVjIE51bWJlciI6IjAwMi0zMzczNiIsIkRvYyBUaXRsZSI6Ik9QVElHQSZ0cmFkZTsgVHJ1c3QgTTogTVFUVCBDbGllbnQiLCJyaWQiOiJ5dXNoZXYiLCJEb2MgdmVyc2lvbiI6IjIuMC4wIiwiRG9jIExhbmd1YWdlIjoiRW5nbGlzaCIsIkRvYyBEaXZpc2lvbiI6Ik4vQSIsIkRvYyBCVSI6Ik4vQSIsIkRvYyBGYW1pbHkiOiJOL0EifQ==)
 
 
 ## Requirements
 
-- [ModusToolbox&trade; software](https://www.cypress.com/products/modustoolbox-software-environment) v2.4 or later
-
-    **Note:** This code example version requires ModusToolbox software version 2.4 or later and is not backward compatible with v2.3 or older versions.
-- Board support package (BSP) minimum required version: 2.0.0
+- [ModusToolbox&trade; software](https://www.infineon.com/modustoolbox) v3.0 or later (tested with v3.0)
+- Board support package (BSP) minimum required version: 4.0.0
 - Programming language: C
 
 - Associated parts:
-   - All [PSoC&trade; 6 MCU](http://www.cypress.com/PSoC6) parts with SDIO
-   - [AIROC™ CYW43012 Wi-Fi & Bluetooth® combo chip](https://www.cypress.com/documentation/datasheets/cyw43012-single-chip-ultra-low-power-ieee-80211n-compliant-ieee-80211ac)
-   - [AIROC™ CYW4343W Wi-Fi & Bluetooth® combo chip](https://www.cypress.com/documentation/datasheets/cyw4343w-single-chip-80211-bgn-macbasebandradio-bluetooth-51)
+   - All [PSoC&trade; 6 MCU](https://www.infineon.com/PSoC6) parts with SDIO
+   - [AIROC&trade; CYW43012 Wi-Fi & Bluetooth&trade; combo chip](https://www.infineon.com/cms/en/product/wireless-connectivity/airoc-wi-fi-plus-bluetooth-combos/wi-fi-4-802.11n/cyw43012/)
+   - [AIROC&trade; CYW4343W Wi-Fi & Bluetooth&trade; combo chip](https://www.infineon.com/cms/en/product/wireless-connectivity/airoc-wi-fi-plus-bluetooth-combos/wi-fi-4-802.11n/cyw4343w/)
+   - [OPTIGA&trade; Trust M security solution](https://www.infineon.com/cms/de/product/security-smart-card-solutions/optiga-embedded-security-solutions/optiga-trust/optiga-trust-m-sls32aia/)
+
+**Note:** Before going through this example you might be also interested in the [ModusToolbox&trade; Training Level 3: WiFi](https://github.com/Infineon/training-modustoolbox-level3-wifi), which explains essential terms for the example, like: TLS, X.509 Certificates, Cloud and MQTT Protocol.  
 
 
 ## Supported toolchains (make variable 'TOOLCHAIN')
 
-- GNU Arm® Embedded Compiler v9.3.1 (`GCC_ARM`) - Default value of `TOOLCHAIN`
-- Arm® Compiler v6.13 (`ARM`)
-- IAR C/C++ Compiler v8.42.2 (`IAR`)
+- GNU Arm&reg; embedded compiler v10.3.1 (`GCC_ARM`) - Default value of `TOOLCHAIN`
+- Arm&reg; compiler v6.13 (`ARM`)
+- IAR C/C++ compiler v8.42.2 (`IAR`)
 
 
 ## Supported kits (make variable 'TARGET')
 
-> **WARNING:** The `optiga-trust-m` middleware supports only BSP versions 2.x.
-
 - [OPTIGA&trade; Trust IoT security development kit](https://www.infineon.com/cms/en/product/evaluation-boards/optiga-trust-m-iot-kit/) (`CYSBSYSKIT-DEV-01`) - Default value of `TARGET`
-- [PSoC&trade; 62S2 evaluation kit with the Sterling-LWB5+ M.2 radio module]() (`CY8CEVAL-062S2-LAI-4373M2`)
+- [PSoC&trade; 62S2 evaluation kit with the Sterling-LWB5+ M.2 radio module](https://www.infineon.com/cms/en/product/evaluation-boards/cy8ceval-062s2/) (`CY8CEVAL-062S2-LAI-4373M2`)
+- To use this code example on a different hardware, please follow this [guidance](https://community.infineon.com/t5/Blogs/Interfacing-OPTIGA-Trust-M-with-a-PSoC-6-device/ba-p/361647)
 
 ## Hardware setup
 
@@ -89,7 +74,7 @@ Create the project and open it using one of the following:
 
 <details><summary><b>In Eclipse IDE for ModusToolbox&trade; software</b></summary>
 
-1. Click the **New Application** link in the **Quick Panel** (or, use **File** > **New** > **ModusToolbox&trade; Application**). This launches the [Project Creator](https://www.cypress.com/ModusToolboxProjectCreator) tool.
+1. Click the **New Application** link in the **Quick Panel** (or, use **File** > **New** > **ModusToolbox&trade; Application**). This launches the [Project Creator](https://www.infineon.com/ModusToolboxProjectCreator) tool.
 
 2. Pick a kit supported by the code example from the list shown in the **Project Creator - Choose Board Support Package (BSP)** dialog.
 
@@ -117,7 +102,7 @@ ModusToolbox&trade; software provides the Project Creator as both a GUI tool and
 
 Use a CLI terminal to invoke the "project-creator-cli" tool. On Windows, use the command line "modus-shell" program provided in the ModusToolbox&trade; software installation instead of a standard Windows command-line application. This shell provides access to all ModusToolbox&trade; software tools. You can access it by typing `modus-shell` in the search box in the Windows menu. In Linux and macOS, you can use any terminal application.
 
-This tool has the following arguments:
+The "project-creator-cli" tool has the following arguments:
 
 Argument | Description | Required/optional
 ---------|-------------|-----------
@@ -128,7 +113,7 @@ Argument | Description | Required/optional
 
 <br>
 
-The following example will clone the "[Hello World](https://github.com/Infineon/mtb-example-psoc6-hello-world)" application with the desired name "MyHelloWorld" configured for the *CYSBSYSKIT-DEV-01* BSP into the specified working directory, *C:/mtb_projects*:
+The following example clones the "[Hello world](https://github.com/Infineon/mtb-example-psoc6-hello-world)" application with the desired name "MyHelloWorld" configured for the *CYSBSYSKIT-DEV-01* BSP into the specified working directory, *C:/mtb_projects*:
 
    ```
    project-creator-cli --board-id CYSBSYSKIT-DEV-01 --app-id mtb-example-psoc6-hello-world --user-app-name MyHelloWorld --target-dir "C:/mtb_projects"
@@ -169,6 +154,11 @@ For a list of supported IDEs and more details, see the "Exporting to IDEs" secti
 
 ## Operation
 
++ [Step 1. Register your X.509 device certificate at AWS IoT](#step-1-register-your-x509-device-certificate-at-aws-iot)
++ [Step 2. Configure the application](#step-2-configure-the-application)
++ [Step 3. Program](#step-3-program)
++ [Alternative methods to verify the publish and subscribe functionality](#alternative-methods-to-verify-the-publish-and-subscribe-functionality)
+
 ### Step 1. Register your X.509 device certificate at AWS IoT
 
 1. Set up the MQTT device (also known as a *Thing*) in the AWS IoT Core as described in the [Getting started with AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/iot-gs.html) tutorial. Do not create a client certificate or a corresponding private key because they will be provided by the secure element.
@@ -186,7 +176,9 @@ For a list of supported IDEs and more details, see the "Exporting to IDEs" secti
         ]
     }
     ```
-2. Download the device certificate from the Cirrent&trade; Cloud ID as per instructions on the OPTIGA&trade; Trust IoT Security Development Kit package. On the **Device Management** tab, select **Cloud ID** > **Actions** > **Download the list of certificates**. A zip archive with a .CSV file inside with the following content is downloaded:
+2. Download the device certificate from the CIRRENT&trade; Cloud ID as per instructions on the OPTIGA&trade; Trust IoT Security Development Kit package. On the **Device Management** tab, select **Cloud ID** > **Actions** > **Download the list of certificates**. A zip archive with a .CSV file inside with the following content is downloaded:
+
+    - **Note:** If your board doesn't have a QR code to claim the device certificate, you can follow the "Step 3. Program" below and flash your board (even if it doesn't contain the correct configuration). You should be able to see your personal certificate extracted from the OPTIGA&trade; Trust M secure element which you can use as follows:
 
     ```
     "device_id","group_id","certificate"
@@ -211,9 +203,10 @@ For a list of supported IDEs and more details, see the "Exporting to IDEs" secti
     -----END CERTIFICATE-----
     "
     ```
+
 3. Copy and paste the content starting from the `-----BEGIN CERTIFICATE-----` to `-----END CERTIFICATE-----` in a PEM file, and name it *certificate.pem*.
 
-4. Register your *certificate.pem* at your AWS IoT endpoint:
+4. Register your *certificate.pem* file at your AWS IoT endpoint:
 
     1. In the navigation pane for the AWS IoT console, click **Secure**, and then click **Certificates**.
 
@@ -253,7 +246,7 @@ For a list of supported IDEs and more details, see the "Exporting to IDEs" secti
     - `MQTT_PORT`: Set to `8883`.
     - `MQTT_SECURE_CONNECTION`: Set to `1`.
 
-5. Download the **Root CA "ECC 256 bit key** (Amazon Root CA 3) for AWS IoT from [CA Certificates for Server Authentication](https://docs.aws.amazon.com/iot/latest/developerguide/server-authentication.html#server-authentication-certs).
+5. Download the **Root CA "ECC 256 bit key** (Amazon Root CA 3) for AWS IoT from [CA certificates for server authentication](https://docs.aws.amazon.com/iot/latest/developerguide/server-authentication.html#server-authentication-certs).
 
     Note the following based on the TLS cipher suite:
 
@@ -266,8 +259,6 @@ For a list of supported IDEs and more details, see the "Exporting to IDEs" secti
     - `ROOT_CA_CERTIFICATE` - Root CA certificate
 
        You can either convert the values to strings manually following the format shown in *mqtt_client_config.h* or you can use the HTML utility available [here](https://github.com/Infineon/amazon-freertos/blob/master/tools/certificate_configuration/PEMfileToCString.html) to convert the certificates and keys from PEM format to C string format. You need to clone the repository from GitHub to use the utility.
-
-       See [Setting up the MQTT Broker](#setting-up-the-mqtt-broker) to learn how to configure these macros for AWS IoT.
 
        For a full list of configuration macros used in this code example, see [Wi-Fi and MQTT configuration macros](#wi-fi-and-mqtt-configuration-macros).
 
@@ -323,13 +314,13 @@ For a list of supported IDEs and more details, see the "Exporting to IDEs" secti
 
 6. Confirm that the user LED state is toggled and the messages received on the subscribed topic are printed on the UART terminal.
 
-   **Figure 4. Publisher and Subscriber logs**
+   **Figure 4. Publisher and subscriber logs**
 
    ![](images/publish_subscribe_messages.png)
 
 This example can be programmed on multiple kits (*Only when `GENERATE_UNIQUE_CLIENT_ID` is set to `1`*); the user LEDs on all the kits will synchronously toggle with a button press on any kit.
 
-### Alternative methods to verify publish and subscribe functionality
+### Alternative methods to verify the publish and subscribe functionality
 
 You can individually verify the publish and subscribe functionalities of the MQTT Client if the MQTT Broker supports a Test MQTT Client such as AWS IoT.
 
@@ -340,9 +331,9 @@ You can individually verify the publish and subscribe functionalities of the MQT
 
 ## Debugging
 
-You can debug the example to step through the code. In the IDE, use the **\<Application Name> Debug (KitProg3_MiniProg4)** configuration in the **Quick Panel**. For more details, see the "Program and debug" section in the [Eclipse IDE for ModusToolbox User Guide](https://www.infineon.com/MTBEclipseIDEUserGuide).
+You can debug the example to step through the code. In the IDE, use the **\<Application Name> Debug (KitProg3_MiniProg4)** configuration in the **Quick Panel**. For details, see the "Program and debug" section in the [Eclipse IDE for ModusToolbox&trade; software user guide](https://www.infineon.com/MTBEclipseIDEUserGuide).
 
-**Note:** **(Only while debugging)** On the CM4 CPU, some code in `main()` may execute before the debugger halts at the beginning of `main()`. This means that some code executes twice - once before the debugger stops execution, and again after the debugger resets the program counter to the beginning of `main()`. See [KBA231071](https://community.infineon.com/docs/DOC-21143) to learn about this and for the workaround.
+**Note:** **(Only while debugging)** On the CM4 CPU, some code in `main()` may execute before the debugger halts at the beginning of `main()`. This means that some code executes twice – once before the debugger stops execution, and again after the debugger resets the program counter to the beginning of `main()`. See [KBA231071](https://community.infineon.com/docs/DOC-21143) to learn about this and for the workaround.
 
 
 ## Design and implementation
@@ -360,7 +351,7 @@ The OPTIGA&trade; Trust task does the following:
 
 1. Initializes the secure element
 
-2. Extracts the pre-provisioned public key certificate out of the chip
+2. Extracts the pre-provisioned public key certificate from the chip
 
 3. Populates the public key certificate with the internal configuration for secure communication
 
@@ -384,8 +375,32 @@ An MQTT event callback function `mqtt_event_callback()` is invoked by the MQTT l
 
 The MQTT Client task handles unexpected disconnections in the MQTT or Wi-Fi connections by initiating reconnection to restore the Wi-Fi and MQTT connections. Upon failure, the Publisher and Subscriber tasks are deleted, cleanup operations of various libraries are performed, and then the MQTT client task is terminated.
 
+### Sequence of operation
+
+1. The user button is pressed.
+
+2. The GPIO interrupt service routine (ISR) notifies the Publisher task.
+
+3. The Publisher task publishes a message on a topic.
+
+4. The MQTT Broker sends back the message to the MQTT Client because it is also subscribed to the same topic.
+
+5. When the message is received, the Subscriber task turns the LED ON or OFF. As a result, the user LED toggles every time the user presses the button.
+
 
 ## Enabling the OPTIGA&trade; Trust library
+
++ [Configuration](#configuration)
+    - [I2C Pins](#i2c-pins)
+    - [Reset and power control pins](#reset-and-power-control-pins)
+    - [Initialization in a FreeRTOS task](#initialization-in-a-freertos-task)
+    - [Certificate extraction and MQTT connection configuration](#certificate-extraction-and-mqtt-connection-configuration)
+    - [mbed TLS configuration](#mbed-tls-configuration)
+    - [Cryptography (ECDSA, ECDHE, Random) functions call routing](#cryptography--ecdsa--ecdhe--random--functions-call-routing)
+    - [Custom Certificates and Keys](#custom-certificates-and-keys)
++ [Configuring the MQTT Client](#configuring-the-mqtt-client)
+    - [Wi-Fi and MQTT configuration macros](#wi-fi-and-mqtt-configuration-macros)
++ [Resources and settings](#resources-and-settings)
 
 ### Configuration
 
@@ -408,7 +423,7 @@ Do the following:
    - If only the reset line is connected: Set this value to `2`.
 
 
-#### Initialization in a FreeRTOS task:
+#### Initialization in a FreeRTOS task
 
 If the [Makefile](Makefile#L81) defines `PSOC_FREERTOS`, it means that the OPTIGA&trade; Trust library uses a FreeRTOS-based Platform Abstraction Layer (PAL) for the communication. In this case, adhere to the following guidelines:
 
@@ -421,7 +436,7 @@ If the [Makefile](Makefile#L81) defines `PSOC_FREERTOS`, it means that the OPTIG
 
 #### Certificate extraction and MQTT connection configuration
 
-Immediately after the secure element is initialized, you might need to extract the certificate out of the chip and assign it to the internal MQTT Client configuration. For an example, see [here](source/mqtt_client_config.c#L171).
+Immediately after the secure element is initialized, you might need to extract the certificate from the chip and assign it to the internal MQTT Client configuration. For an example, see [here](source/mqtt_client_config.c#L171).
 
 
 #### mbed TLS configuration
@@ -444,8 +459,7 @@ To do this, do **one** of the following:
 
 If Wi-Fi online provisioning is used, your example will try to establish a connection with several clouds. This restricts the use of many handshake methods. For example, the `MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED` method might be not available. You can choose the `MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED` and change the Root CA configuration (`ROOT_CA_CERTIFICATE`) to use the Amazon Root CA 1 (based on RSA 2048), instead of the default value of Amazon Root CA 3 (based on ECC 256).
 
-
-#### Cryptography (ECDSA, ECDHE, Random) functions call routing:
+#### Cryptography (ECDSA, ECDHE, Random) functions call routing
 
 Ensure that your mbed TLS configuration file has the following macros defined:
 
@@ -456,6 +470,15 @@ Ensure that your mbed TLS configuration file has the following macros defined:
 - `MBEDTLS_ECDSA_GENKEY_ALT`
 
 In addition to these macros, ensure that your build includes the *$(optiga-trust-m)/examples/mbedtls_port* files.
+
+#### Custom Certificates and Keys
+
+If you don't have your own credentials for the connection, but you would like to generate them, refer to the [OPTIGA&trade; Trust M: Data and certificates management](https://github.com/Infineon/mtb-example-optiga-data-management) Code Example.
+If you would like to use existing credentials and would like to change default Object IDs, edit the Makefile and add to the `DEFINES` the following macros:
+
+- `LABEL_DEVICE_PRIVATE_KEY_FOR_TLS='"0xE0F1"'` to define a private key slot of the PKCS11 Engine (secure-sockets middleware library), where `'"0xE0F1"'` value can be of your choice.
+- `CONFIG_OPTIGA_TRUST_M_PRIVKEY_SLOT=0xE0F1` to define the private key slot of the mbedtls alternative implementation, where `0xe0F1` is the same value as specified above. Keep in mind, that here no additional signs `'"` are required
+- `LABEL_DEVICE_CERTIFICATE_FOR_TLS='"0xE0E1"'` to define a matching certificate to the private key mentioned above of the PKCS11 Engine, where `'"0xE0E1"'` value can be of your choice.
 
 
 ### Configuring the MQTT Client
@@ -470,7 +493,7 @@ In addition to these macros, ensure that your build includes the *$(optiga-trust
 | `WIFI_SECURITY`   | Security type of the Wi-Fi AP. See the `cy_wcm_security_t` structure in the *cy_wcm.h* file for more details.      |
 | `MAX_WIFI_CONN_RETRIES`   | Maximum number of retries for the Wi-Fi connection   |
 | `WIFI_CONN_RETRY_INTERVAL_MS`   | Time interval in milliseconds in between successive Wi-Fi connection retries   |
-| **MQTT Connection configurations**  |  In *configs/mqtt_client_config.h*  |
+| **MQTT connection configurations**  |  In *configs/mqtt_client_config.h*  |
 | `MQTT_BROKER_ADDRESS`      | Hostname of the MQTT Broker        |
 | `MQTT_PORT`                | Port number to be used for the MQTT connection. As specified by the Internet Assigned Numbers Authority (IANA), port numbers assigned for the MQTT protocol are *1883* for non-secure connections and *8883* for secure connections. However, MQTT Brokers may use other ports. Configure this macro as specified by the MQTT Broker.                      |
 | `MQTT_SECURE_CONNECTION`   | Set this macro to `1` if your application requires establishing a secure (TLS) connection to the MQTT Broker; else `0`.         |
@@ -478,7 +501,7 @@ In addition to these macros, ensure that your build includes the *$(optiga-trust
 | **MQTT Client certificate configurations**  |  In *configs/mqtt_client_config.h*  |
 | `CLIENT_CERTIFICATE` <br> `CLIENT_PRIVATE_KEY`  | Certificate and private key of the MQTT Client used for client authentication. Note that these macros are applicable only when `MQTT_SECURE_CONNECTION` is set to `1`.      |
 | `ROOT_CA_CERTIFICATE`      |  Root CA certificate of the MQTT Broker |
-| **MQTT Message Configurations**    |  In *configs/mqtt_client_config.h*  |
+| **MQTT message configurations**    |  In *configs/mqtt_client_config.h*  |
 | `MQTT_PUB_TOPIC`           | MQTT topic to which the messages are published by the Publisher task to the MQTT Broker    |
 | `MQTT_SUB_TOPIC`           | MQTT topic to which the Subscriber task subscribes. The MQTT Broker sends the messages to the Subscriber that are published in this topic (or equivalent topic).  |
 | `MQTT_MESSAGES_QOS`        | Quality of Service (QoS) level to be used by the Publisher and Subscriber. Valid choices are `0`, `1`, and `2`.  |
@@ -490,7 +513,7 @@ In addition to these macros, ensure that your build includes the *$(optiga-trust
 | `MQTT_CLIENT_IDENTIFIER`     | Client identifier (client ID) string to be used during an MQTT connection. If `GENERATE_UNIQUE_CLIENT_ID` is set to `1`, a timestamp is appended to this macro value and used as the client ID; else, the value specified for this macro is directly used as the client ID.   |
 | `MQTT_CLIENT_IDENTIFIER_MAX_LEN`   | The longest client identifier that an MQTT Server must accept (as defined by the MQTT 3.1.1 spec) is 23 characters. However, some MQTT Brokers support longer client IDs. Configure this macro as per the MQTT Broker specification.  |
 | `MQTT_TIMEOUT_MS`            | Timeout in milliseconds for MQTT operations in this example   |
-| `MQTT_KEEP_ALIVE_SECONDS`    | Keepalive interval in seconds used for the MQTT ping request   |
+| `MQTT_KEEP_ALIVE_SECONDS`    | Keep a live interval in seconds used for the MQTT ping request   |
 | `MQTT_ALPN_PROTOCOL_NAME`   | Application Layer Protocol Negotiation (ALPN) protocol name to be used that is supported by the MQTT Broker in use. Note that this is an optional macro for most of the use cases. <br>Per IANA, the port numbers assigned for the MQTT protocol are 1883 for non-secure connections and 8883 for secure connections. Some applications may need to use other ports for MQTT such as port 443 (which is reserved for HTTPS). ALPN is an extension for TLS that allows many protocols to be used over a secure connection.     |
 | `MQTT_SNI_HOSTNAME`   | Server Name Indication (SNI) host name to be used during a TLS connection as specified by the MQTT Broker. <br>SNI is an extension to the TLS protocol. As required by some MQTT Brokers, SNI typically includes the hostname in the "Client Hello" message sent during a TLS handshake.     |
 | `MQTT_NETWORK_BUFFER_SIZE`   | Size of the network buffer  allocated for sending and receiving MQTT packets over the network. Note that the minimum buffer size is defined by the `CY_MQTT_MIN_NETWORK_BUFFER_SIZE` macro in the MQTT library.  |
@@ -509,18 +532,25 @@ In addition to these macros, ensure that your build includes the *$(optiga-trust
 | GPIO (HAL)    | CYBSP_USER_BTN         | User button used to notify the Publisher to publish MQTT messages |
 
 
+Add `MBEDTLS_VERBOSE=4` and `ENABLE_SECURE_SOCKETS_LOGS` in the Makefile to the end of the `DEFINES` list after a whitespace to enable an verbose output of mbedtls in case you have a problem during the TLS channel establishment, the Makefile content should be then similar to the following:
+
+```
+DEFINES=$(MBEDTLSFLAGS) $(OPTIGAFLAGS) CYBSP_WIFI_CAPABLE CY_RETARGET_IO_CONVERT_LF_TO_CRLF CY_CRYPTO_HAL_DISABLE MBEDTLS_VERBOSE=4
+```
+
 
 ## Related resources
 
-Resources  | Links
------------|----------------------------------
-Application notes  | [AN228571](https://www.cypress.com/AN228571) – Getting started with PSoC&trade; 6 MCU on ModusToolbox&trade; software <br>  [AN215656](https://www.cypress.com/AN215656) – PSoC&trade; 6 MCU: Dual-CPU system design
-Code examples  | [Using ModusToolbox&trade; software](https://github.com/Infineon/Code-Examples-for-ModusToolbox-Software) on GitHub
-Device documentation | [PSoC&trade; 6 MCU datasheets](https://www.cypress.com/search/all?f[0]=meta_type%3Atechnical_documents&f[1]=resource_meta_type%3A575&f[2]=field_related_products%3A114026) <br> [PSoC&trade; 6 technical reference manuals](https://www.cypress.com/search/all/PSoC%206%20Technical%20Reference%20Manual?f[0]=meta_type%3Atechnical_documents&f[1]=resource_meta_type%3A583)
+Resources | Links
+----------|------
+Application notes |[AN228571](https://www.infineon.com/dgdl/Infineon-AN228571_Getting_started_with_PSoC_6_MCU_on_ModusToolbox_software-ApplicationNotes-v06_00-EN.pdf?fileId=8ac78c8c7cdc391c017d0d36de1f66d1) – Getting started with PSoC&trade; 6 MCU on ModusToolbox&trade; software <br> [AN215656](https://www.infineon.com/dgdl/Infineon-AN215656_PSoC_6_MCU_Dual-CPU_System_Design-ApplicationNotes-v09_00-EN.pdf?fileId=8ac78c8c7cdc391c017d0d3180c4655f) – PSoC&trade; 6 MCU: Dual-CPU system design
+Code examples on GitHub| [Using ModusToolbox&trade; software](https://github.com/Infineon/Code-Examples-for-ModusToolbox-Software)
+Device documentation | [PSoC&trade; 6 MCU datasheets](https://www.infineon.com/dgdl/Infineon-PSoC_6_MCU_CY8C62x6_CY8C62x7-DataSheet-v14_00-EN.pdf?fileId=8ac78c8c7d0d8da4017d0ee4c9386bff) <br> [PSoC&trade; 6 technical reference manuals](https://www.infineon.com/dgdl/Infineon-PSoC_6_MCU_PSoC_62_Architecture_Technical_Reference_Manual-AdditionalTechnicalInformation-v08_00-EN.pdf?fileId=8ac78c8c7d0d8da4017d0f94758401d1) <br> [OPTIGA&trade; Trust M datasheet](https://www.infineon.com/cms/en/product/security-smart-card-solutions/optiga-embedded-security-solutions/optiga-trust/optiga-trust-m-sls32aia/#!?fileId=5546d4626c1f3dc3016c853c271a7e4a)
 Development kits | Select your kits from the [Evaluation Board Finder](https://www.infineon.com/cms/en/design-support/finder-selection-tools/product-finder/evaluation-board) page.
 Libraries on GitHub  | [mtb-pdl-cat1](https://github.com/Infineon/mtb-pdl-cat1) – PSoC&trade; 6 peripheral driver library (PDL)  <br> [mtb-hal-cat1](https://github.com/Infineon/mtb-hal-cat1) – Hardware abstraction layer (HAL) library <br> [retarget-io](https://github.com/Infineon/retarget-io) – Utility library to retarget STDIO messages to a UART port
-Middleware on GitHub  |[mqtt](https://github.com/Infineon/mqtt) – MQTT Client library and documents <br> [optiga-trust-m](https://github.com/Infineon/optiga-trust-m) – OPTIGA™ Trust M library <br> [wifi-connection-manager](https://github.com/Infineon/wifi-connection-manager) – Wi-Fi connection manager (WCM) library and documents <br> [wifi-mw-core](https://github.com/Infineon/wifi-mw-core) – Wi-Fi middleware core library and documents <br> [freeRTOS](https://github.com/Infineon/freertos) – FreeRTOS library and documents <br> [capsense](https://github.com/Infineon/capsense) – CAPSENSE&trade; library and documents<br> [psoc6-middleware](https://github.com/Infineon/psoc6-middleware) – Links to all PSoC&trade; 6 MCU middleware
-Tools  | [Eclipse IDE for ModusToolbox&trade; software](https://www.cypress.com/modustoolbox) – ModusToolbox&trade; software is a collection of easy-to-use software and tools enabling rapid development with Infineon MCUs, covering applications from embedded sense and control to wireless and cloud-connected systems using AIROC&trade; Wi-Fi and Bluetooth® connectivity devices.
+Middleware on GitHub  | [optiga-trust-m](https://github.com/Infineon/optiga-trust-m) – OPTIGA&trade; Trust M library and documents <br> [capsense](https://github.com/Infineon/capsense) – CAPSENSE&trade; library and documents <br> [psoc6-middleware](https://github.com/Infineon/modustoolbox-software#psoc-6-middleware-libraries) – Links to all PSoC&trade; 6 MCU middleware
+Tools  | [Eclipse IDE for ModusToolbox&trade; software](https://www.infineon.com/cms/en/design-support/tools/sdk/modustoolbox-software) – ModusToolbox&trade; software is a collection of easy-to-use software and tools enabling rapid development with Infineon MCUs, covering applications from embedded sense and control to wireless and cloud-connected systems using AIROC&trade; Wi-Fi and Bluetooth® connectivity devices.
+
 
 <br>
 
@@ -528,23 +558,24 @@ Tools  | [Eclipse IDE for ModusToolbox&trade; software](https://www.cypress.com/
 
 Infineon provides a wealth of data at www.infineon.com to help you select the right device, and quickly and effectively integrate it into your design.
 
-For PSoC&trade; 6 MCU devices, see [How to design with PSoC&trade; 6 MCU – KBA223067](https://community.infineon.com/docs/DOC-14644) in the Infineon community.
+For PSoC&trade; 6 MCU devices, see [How to design with PSoC&trade; 6 MCU – KBA223067](https://community.infineon.com/docs/DOC-14644) in the Infineon Developer Community.
 
 ## Document history
 
-Document title: *CE229889* – *OPTIGA™ Trust M: MQTT Client*
+Document title: *CE233736* – *OPTIGA&trade; Trust M: MQTT Client*
 
 | Version | Description of change                          |
 | ------- | ---------------------------------------------- |
 | 1.0.0   | New code example                               |
 | 1.1.0   | Fix 62S2 boards build and minor README updates |
+| 2.0.0   | Major update to support ModusToolbox&trade; v3.0. This version is not backward compatible with previous versions of ModusToolbox&trade; |
 ------
 
 All other trademarks or registered trademarks referenced herein are the property of their respective owners.
 
 -----------------
 
-© Cypress Semiconductor Corporation, 2022. This document is the property of Cypress Semiconductor Corporation, an Infineon Technologies company, and its affiliates ("Cypress").  This document, including any software or firmware included or referenced in this document ("Software"), is owned by Cypress under the intellectual property laws and treaties of the United States and other countries worldwide.  Cypress reserves all rights under such laws and treaties and does not, except as specifically stated in this paragraph, grant any license under its patents, copyrights, trademarks, or other intellectual property rights.  If the Software is not accompanied by a license agreement and you do not otherwise have a written agreement with Cypress governing the use of the Software, then Cypress hereby grants you a personal, non-exclusive, nontransferable license (without the right to sublicense) (1) under its copyright rights in the Software (a) for Software provided in source code form, to modify and reproduce the Software solely for use with Cypress hardware products, only internally within your organization, and (b) to distribute the Software in binary code form externally to end users (either directly or indirectly through resellers and distributors), solely for use on Cypress hardware product units, and (2) under those claims of Cypress’s patents that are infringed by the Software (as provided by Cypress, unmodified) to make, use, distribute, and import the Software solely for use with Cypress hardware products.  Any other use, reproduction, modification, translation, or compilation of the Software is prohibited.
+© Cypress Semiconductor Corporation, 2023. This document is the property of Cypress Semiconductor Corporation, an Infineon Technologies company, and its affiliates ("Cypress").  This document, including any software or firmware included or referenced in this document ("Software"), is owned by Cypress under the intellectual property laws and treaties of the United States and other countries worldwide.  Cypress reserves all rights under such laws and treaties and does not, except as specifically stated in this paragraph, grant any license under its patents, copyrights, trademarks, or other intellectual property rights.  If the Software is not accompanied by a license agreement and you do not otherwise have a written agreement with Cypress governing the use of the Software, then Cypress hereby grants you a personal, non-exclusive, nontransferable license (without the right to sublicense) (1) under its copyright rights in the Software (a) for Software provided in source code form, to modify and reproduce the Software solely for use with Cypress hardware products, only internally within your organization, and (b) to distribute the Software in binary code form externally to end users (either directly or indirectly through resellers and distributors), solely for use on Cypress hardware product units, and (2) under those claims of Cypress’s patents that are infringed by the Software (as provided by Cypress, unmodified) to make, use, distribute, and import the Software solely for use with Cypress hardware products.  Any other use, reproduction, modification, translation, or compilation of the Software is prohibited.
 <br>
 TO THE EXTENT PERMITTED BY APPLICABLE LAW, CYPRESS MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH REGARD TO THIS DOCUMENT OR ANY SOFTWARE OR ACCOMPANYING HARDWARE, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  No computing device can be absolutely secure.  Therefore, despite security measures implemented in Cypress hardware or software products, Cypress shall have no liability arising out of any security breach, such as unauthorized access to or use of a Cypress product.  CYPRESS DOES NOT REPRESENT, WARRANT, OR GUARANTEE THAT CYPRESS PRODUCTS, OR SYSTEMS CREATED USING CYPRESS PRODUCTS, WILL BE FREE FROM CORRUPTION, ATTACK, VIRUSES, INTERFERENCE, HACKING, DATA LOSS OR THEFT, OR OTHER SECURITY INTRUSION (collectively, "Security Breach").  Cypress disclaims any liability relating to any Security Breach, and you shall and hereby do release Cypress from any claim, damage, or other liability arising from any Security Breach.  In addition, the products described in these materials may contain design defects or errors known as errata which may cause the product to deviate from published specifications.  To the extent permitted by applicable law, Cypress reserves the right to make changes to this document without further notice. Cypress does not assume any liability arising out of the application or use of any product or circuit described in this document.  Any information provided in this document, including any sample design information or programming code, is provided only for reference purposes.  It is the responsibility of the user of this document to properly design, program, and test the functionality and safety of any application made of this information and any resulting product.  "High-Risk Device" means any device or system whose failure could cause personal injury, death, or property damage.  Examples of High-Risk Devices are weapons, nuclear installations, surgical implants, and other medical devices.  "Critical Component" means any component of a High-Risk Device whose failure to perform can be reasonably expected to cause, directly or indirectly, the failure of the High-Risk Device, or to affect its safety or effectiveness.  Cypress is not liable, in whole or in part, and you shall and hereby do release Cypress from any claim, damage, or other liability arising from any use of a Cypress product as a Critical Component in a High-Risk Device.  You shall indemnify and hold Cypress, including its affiliates, and its directors, officers, employees, agents, distributors, and assigns harmless from and against all claims, costs, damages, and expenses, arising out of any claim, including claims for product liability, personal injury or death, or property damage arising from any use of a Cypress product as a Critical Component in a High-Risk Device.  Cypress products are not intended or authorized for use as a Critical Component in any High-Risk Device except to the limited extent that (i) Cypress’s published data sheet for the product explicitly states Cypress has qualified the product for use in a specific High-Risk Device, or (ii) Cypress has given you advance written authorization to use the product as a Critical Component in the specific High-Risk Device and you have signed a separate indemnification agreement.
 <br>

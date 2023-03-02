@@ -7,7 +7,7 @@
 #
 ################################################################################
 # \copyright
-# Copyright 2018-2021, Cypress Semiconductor Corporation (an Infineon company)
+# Copyright 2018-2023, Cypress Semiconductor Corporation (an Infineon company)
 # SPDX-License-Identifier: Apache-2.0
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,13 +27,18 @@
 ################################################################################
 # Basic Configuration
 ################################################################################
+#Type of ModusToolbox Makefile Options include:
+#
+#COMBINED    -- Top Level Makefile usually for single standalone application
+#APPLICATION -- Top Level Makefile usually for multi project application
+#PROJECT     -- Project Makefile under Application
+#
+MTB_TYPE=COMBINED
 
 # Target board/hardware (BSP).
 # To change the target, it is recommended to use the Library manager
-# ('make modlibs' from command line), which will also update Eclipse IDE launch
-# configurations. If TARGET is manually edited, ensure TARGET_<BSP>.mtb with a
-# valid URL exists in the application, run 'make getlibs' to fetch BSP contents
-# and update or regenerate launch configurations for your IDE.
+# ('make library-manager' from command line), which will also update Eclipse IDE launch
+# configurations.
 TARGET=CYSBSYSKIT-DEV-01
 
 # Name of application (used to derive name of final linked file).
@@ -44,7 +49,7 @@ APPNAME=mtb-example-optiga-mqtt-client
 
 # Name of toolchain to use. Options include:
 #
-# GCC_ARM -- GCC provided with ModusToolbox IDE
+# GCC_ARM -- GCC provided with ModusToolbox software
 # ARM     -- ARM Compiler (must be installed separately)
 # IAR     -- IAR Compiler (must be installed separately)
 #
@@ -78,7 +83,7 @@ VERBOSE=
 # ... then code in directories named COMPONENT_foo and COMPONENT_bar will be
 # added to the build
 #
-COMPONENTS=FREERTOS LWIP MBEDTLS SECURE_SOCKETS RTOS_AWARE PSOC6_FREERTOS
+COMPONENTS=FREERTOS LWIP MBEDTLS SECURE_SOCKETS RTOS_AWARE OPTIGA OPTIGA_PAL_FREERTOS
 
 # Like COMPONENTS, but disable optional code that was enabled by default.
 DISABLE_COMPONENTS=
@@ -101,15 +106,22 @@ MBEDTLSFLAGS = MBEDTLS_USER_CONFIG_FILE='"mbedtls_user_config.h"' CY_CRYPTO_HAL_
 
 # Add additional defines to the build process (without a leading -D).
 
-DEFINES=$(MBEDTLSFLAGS) $(OPTIGAFLAGS) CYBSP_WIFI_CAPABLE CY_RETARGET_IO_CONVERT_LF_TO_CRLF CY_CRYPTO_HAL_DISABLE
+DEFINES=$(MBEDTLSFLAGS) \
+        $(OPTIGAFLAGS) \
+        CYBSP_WIFI_CAPABLE \
+        CY_RETARGET_IO_CONVERT_LF_TO_CRLF \
+        CY_CRYPTO_HAL_DISABLE \
+        CY_SECURE_SOCKETS_PKCS_SUPPORT
 
 # CY8CPROTO-062-4343W board shares the same GPIO for the user button (USER BTN1)
 # and the CYW4343W host wake up pin. Since this example uses the GPIO for  
 # interfacing with the user button, the SDIO interrupt to wake up the host is
 # disabled by setting CY_WIFI_HOST_WAKE_SW_FORCE to '0'.
-ifeq ($(TARGET), CY8CPROTO-062-4343W)
+# 
+# If you wish to enable this host wake up feature, Comment DEFINES+=CY_WIFI_HOST_WAKE_SW_FORCE=0. 
+# If you want this feature on CY8CPROTO-062-4343W, change the GPIO pin for USER BTN 
+# in design/hardware & Comment DEFINES+=CY_WIFI_HOST_WAKE_SW_FORCE=0.
 DEFINES+=CY_WIFI_HOST_WAKE_SW_FORCE=0
-endif
 
 # Select softfp or hardfp floating point. Default is softfp.
 VFP_SELECT=
@@ -173,11 +185,11 @@ CY_GETLIBS_SHARED_NAME=mtb_shared
 # Absolute path to the compiler's "bin" directory.
 #
 # The default depends on the selected TOOLCHAIN (GCC_ARM uses the ModusToolbox
-# IDE provided compiler by default).
+# software provided compiler by default).
 CY_COMPILER_PATH=
 
 
-# Locate ModusToolbox IDE helper tools folders in default installation
+# Locate ModusToolbox helper tools folders in default installation
 # locations for Windows, Linux, and macOS.
 CY_WIN_HOME=$(subst \,/,$(USERPROFILE))
 CY_TOOLS_PATHS ?= $(wildcard \
@@ -185,7 +197,7 @@ CY_TOOLS_PATHS ?= $(wildcard \
     $(HOME)/ModusToolbox/tools_* \
     /Applications/ModusToolbox/tools_*)
 
-# If you install ModusToolbox IDE in a custom location, add the path to its
+# If you install ModusToolbox software in a custom location, add the path to its
 # "tools_X.Y" folder (where X and Y are the version number of the tools
 # folder). Make sure you use forward slashes.
 CY_TOOLS_PATHS+=

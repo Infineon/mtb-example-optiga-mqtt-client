@@ -1,7 +1,9 @@
 /******************************************************************************
-* File Name:   publisher_task.h
+* File Name:   pal_i2c.c
 *
-* Description: This file is the public interface of publisher_task.c
+* Description: This file contains part of the Platform Abstraction Layer.
+*              This is a platform specific file. This file implements 
+*              the platform abstraction layer APIs for GPIO.
 *
 * Related Document: See README.md
 *
@@ -39,49 +41,60 @@
 * so agrees to indemnify Cypress against all liability.
 *******************************************************************************/
 
+/*******************************************************************************
+ * Header file includes
+ ******************************************************************************/
+#include "optiga/pal/pal_ifx_i2c_config.h"
+#include "optiga/pal/pal_gpio.h"
+#include "pal_psoc_gpio_mapping.h"
 
-#ifndef PUBLISHER_TASK_H_
-#define PUBLISHER_TASK_H_
 
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
+#include "cy_pdl.h"
+#include "cyhal.h"
+#include "cybsp.h"
 
 /*******************************************************************************
-* Macros
-********************************************************************************/
-/* Task parameters for Button Task. */
-#define PUBLISHER_TASK_PRIORITY               (2)
-#define PUBLISHER_TASK_STACK_SIZE             (1024 * 1)
-
-/*******************************************************************************
-* Global Variables
-********************************************************************************/
-/* Commands for the Publisher Task. */
-typedef enum
+ * Function Definitions
+ ******************************************************************************/
+//lint --e{714,715} suppress "This is implemented for overall completion of API"
+pal_status_t pal_gpio_init(const pal_gpio_t * p_gpio_context)
 {
-    PUBLISHER_INIT,
-    PUBLISHER_DEINIT,
-    PUBLISH_MQTT_MSG
-} publisher_cmd_t;
+    pal_status_t cy_hal_status = PAL_STATUS_SUCCESS;
+    pal_psoc_gpio_t* pin_config = (pal_psoc_gpio_t *)p_gpio_context->p_gpio_hw;
+    cy_hal_status = cyhal_gpio_init(pin_config->gpio,
+                                       CYHAL_GPIO_DIR_OUTPUT, 
+                                       CYHAL_GPIO_DRIVE_STRONG, 
+                                       pin_config->init_state);
+    if (CY_RSLT_SUCCESS != cy_hal_status)
+    {
+        cy_hal_status = PAL_STATUS_FAILURE;
+    }
 
-/* Struct to be passed via the publisher task queue */
-typedef struct{
-    publisher_cmd_t cmd;
-    char *data;
-} publisher_data_t;
+    return (cy_hal_status);
+}
 
-/*******************************************************************************
-* Extern Variables
-********************************************************************************/
-extern TaskHandle_t publisher_task_handle;
-extern QueueHandle_t publisher_task_q;
+//lint --e{714,715} suppress "This is implemented for overall completion of API"
+pal_status_t pal_gpio_deinit(const pal_gpio_t * p_gpio_context)
+{
+    pal_psoc_gpio_t* pin_config = (pal_psoc_gpio_t *)p_gpio_context->p_gpio_hw;
+    cyhal_gpio_free(pin_config->gpio);
+    return (PAL_STATUS_SUCCESS);
+}
 
-/*******************************************************************************
-* Function Prototypes
-********************************************************************************/
-void publisher_task(void *pvParameters);
+void pal_gpio_set_high(const pal_gpio_t * p_gpio_context)
+{
+    if ((p_gpio_context != NULL) && (p_gpio_context->p_gpio_hw != NULL))
+    {
+        pal_psoc_gpio_t* pin_config = (pal_psoc_gpio_t *)p_gpio_context->p_gpio_hw;
+        cyhal_gpio_write((cyhal_gpio_t)(pin_config->gpio), true);
+    }
+}
 
-#endif /* PUBLISHER_TASK_H_ */
-
-/* [] END OF FILE */
+void pal_gpio_set_low(const pal_gpio_t * p_gpio_context)
+{
+    if ((p_gpio_context != NULL) && (p_gpio_context->p_gpio_hw != NULL))
+    {
+        pal_psoc_gpio_t* pin_config = (pal_psoc_gpio_t *)p_gpio_context->p_gpio_hw;
+        cyhal_gpio_write((cyhal_gpio_t)(pin_config->gpio), false);
+    }
+}

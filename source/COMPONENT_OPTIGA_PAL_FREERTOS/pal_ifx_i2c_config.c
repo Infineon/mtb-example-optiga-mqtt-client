@@ -1,7 +1,9 @@
 /******************************************************************************
-* File Name:   publisher_task.h
+* File Name:   pal_ifx_i2c_config.c
 *
-* Description: This file is the public interface of publisher_task.c
+* Description: This file contains part of the Platform Abstraction Layer.
+*              This is a platform specific file. This file implements 
+*              platform abstraction layer configurations for ifx i2c protocol.
 *
 * Related Document: See README.md
 *
@@ -39,49 +41,87 @@
 * so agrees to indemnify Cypress against all liability.
 *******************************************************************************/
 
-
-#ifndef PUBLISHER_TASK_H_
-#define PUBLISHER_TASK_H_
-
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
+/*******************************************************************************
+ * Header file includes
+ ******************************************************************************/
+#include "optiga/pal/pal_gpio.h"
+#include "optiga/pal/pal_i2c.h"
+#include "optiga/ifx_i2c/ifx_i2c_config.h"
+#include "optiga/pal/pal_ifx_i2c_config.h"
+#include "optiga_lib_config.h"
+#include "pal_psoc_i2c_mapping.h"
+#include "pal_psoc_gpio_mapping.h"
+#include "cy_pdl.h"
+#include "cyhal.h"
+#include "cybsp.h"
 
 /*******************************************************************************
-* Macros
-********************************************************************************/
-/* Task parameters for Button Task. */
-#define PUBLISHER_TASK_PRIORITY               (2)
-#define PUBLISHER_TASK_STACK_SIZE             (1024 * 1)
+ * Global Variables
+ ******************************************************************************/
+// i2c driver related
+cyhal_i2c_t i2c_master_obj;
 
-/*******************************************************************************
-* Global Variables
-********************************************************************************/
-/* Commands for the Publisher Task. */
-typedef enum
+#ifdef OPTIGA_TRUSTM_VDD
+pal_psoc_gpio_t optiga_vdd_config =
 {
-    PUBLISHER_INIT,
-    PUBLISHER_DEINIT,
-    PUBLISH_MQTT_MSG
-} publisher_cmd_t;
+    .gpio = OPTIGA_TRUSTM_VDD,
+    .init_state = true
+};
+#endif
 
-/* Struct to be passed via the publisher task queue */
-typedef struct{
-    publisher_cmd_t cmd;
-    char *data;
-} publisher_data_t;
+#ifdef OPTIGA_TRUSTM_RST
+pal_psoc_gpio_t optiga_reset_config =
+{
+    .gpio = OPTIGA_TRUSTM_RST,
+    .init_state = true
+};
+#endif
 
-/*******************************************************************************
-* Extern Variables
-********************************************************************************/
-extern TaskHandle_t publisher_task_handle;
-extern QueueHandle_t publisher_task_q;
+pal_psoc_i2c_t optiga_i2c_master_config =
+{
+    .i2c_master_channel = &i2c_master_obj,
+    .scl = OPTIGA_TRUSTM_SCL,
+    .sda = OPTIGA_TRUSTM_SDA
+};
 
-/*******************************************************************************
-* Function Prototypes
-********************************************************************************/
-void publisher_task(void *pvParameters);
+/**
+* \brief PAL vdd pin configuration for OPTIGA. 
+ */
+pal_gpio_t optiga_vdd_0 =
+{
+#ifdef OPTIGA_TRUSTM_VDD
+    // Platform specific GPIO context for the pin used to toggle Vdd.
+    (void * )&optiga_vdd_config
+#else
+    NULL
+#endif
+};
 
-#endif /* PUBLISHER_TASK_H_ */
+/**
+ * \brief PAL reset pin configuration for OPTIGA.
+ */
+pal_gpio_t optiga_reset_0 =
+{
+#ifdef OPTIGA_TRUSTM_RST
+    // Platform specific GPIO context for the pin used to toggle Reset.
+    (void * )&optiga_reset_config
+#else
+    NULL
+#endif
+};
 
-/* [] END OF FILE */
+/**
+ * \brief PAL I2C configuration for OPTIGA.
+ */
+pal_i2c_t optiga_pal_i2c_context_0 =
+{
+    /// Pointer to I2C master platform specific context
+    (void*)&optiga_i2c_master_config,
+    /// Upper layer context
+    NULL,
+    /// Callback event handler
+    NULL,
+    /// Slave address
+    0x30
+};
+

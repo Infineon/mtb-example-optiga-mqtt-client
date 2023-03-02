@@ -1,7 +1,9 @@
 /******************************************************************************
-* File Name:   publisher_task.h
+* File Name:   heap_usage.c
 *
-* Description: This file is the public interface of publisher_task.c
+* Description: This file contains the code for printing heap usage.
+*              Supports only GCC_ARM compiler. Define PRINT_HEAP_USAGE for
+*              printing the heap usage numbers.
 *
 * Related Document: See README.md
 *
@@ -40,48 +42,61 @@
 *******************************************************************************/
 
 
-#ifndef PUBLISHER_TASK_H_
-#define PUBLISHER_TASK_H_
+/*******************************************************************************
+ * Header file includes
+ ******************************************************************************/
+#include <stdint.h>
+#include <inttypes.h>
+#include <stdio.h>
 
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
+/* ARM compiler also defines __GNUC__ */
+#if defined (__GNUC__) && !defined(__ARMCC_VERSION)
+#include <malloc.h>
+#endif /* #if defined (__GNUC__) && !defined(__ARMCC_VERSION) */
+
 
 /*******************************************************************************
-* Macros
-********************************************************************************/
-/* Task parameters for Button Task. */
-#define PUBLISHER_TASK_PRIORITY               (2)
-#define PUBLISHER_TASK_STACK_SIZE             (1024 * 1)
+ * Macros
+ ******************************************************************************/
+#define TO_KB(size_bytes)  ((float)(size_bytes)/1024)
+
 
 /*******************************************************************************
-* Global Variables
-********************************************************************************/
-/* Commands for the Publisher Task. */
-typedef enum
+ * Function Definitions
+ ******************************************************************************/
+
+/*******************************************************************************
+* Function Name: print_heap_usage
+********************************************************************************
+* Summary:
+* Prints the available heap and utilized heap by using mallinfo().
+*
+*******************************************************************************/
+void print_heap_usage(char *msg)
 {
-    PUBLISHER_INIT,
-    PUBLISHER_DEINIT,
-    PUBLISH_MQTT_MSG
-} publisher_cmd_t;
+    /* ARM compiler also defines __GNUC__ */
+#if defined(PRINT_HEAP_USAGE) && defined (__GNUC__) && !defined(__ARMCC_VERSION)
+    struct mallinfo mall_info = mallinfo();
 
-/* Struct to be passed via the publisher task queue */
-typedef struct{
-    publisher_cmd_t cmd;
-    char *data;
-} publisher_data_t;
+    extern uint8_t __HeapBase;  /* Symbol exported by the linker. */
+    extern uint8_t __HeapLimit; /* Symbol exported by the linker. */
 
-/*******************************************************************************
-* Extern Variables
-********************************************************************************/
-extern TaskHandle_t publisher_task_handle;
-extern QueueHandle_t publisher_task_q;
+    uint8_t* heap_base = (uint8_t *)&__HeapBase;
+    uint8_t* heap_limit = (uint8_t *)&__HeapLimit;
+    uint32_t heap_size = (uint32_t)(heap_limit - heap_base);
 
-/*******************************************************************************
-* Function Prototypes
-********************************************************************************/
-void publisher_task(void *pvParameters);
+    printf("\r\n\n********** Heap Usage **********\r\n");
+    printf(msg);
+    printf("\r\nTotal available heap        : %"PRIu32" bytes/%.2f KB\r\n", heap_size, TO_KB(heap_size));
 
-#endif /* PUBLISHER_TASK_H_ */
+    printf("Maximum heap utilized so far: %u bytes/%.2f KB, %.2f%% of available heap\r\n",
+            mall_info.arena, TO_KB(mall_info.arena), ((float) mall_info.arena * 100u)/heap_size);
+
+    printf("Heap in use at this point   : %u bytes/%.2f KB, %.2f%% of available heap\r\n",
+            mall_info.uordblks, TO_KB(mall_info.uordblks), ((float) mall_info.uordblks * 100u)/heap_size);
+
+    printf("********************************\r\n\n");
+#endif /* #if defined(PRINT_HEAP_USAGE) && defined (__GNUC__) && !defined(__ARMCC_VERSION) */
+}
 
 /* [] END OF FILE */

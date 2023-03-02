@@ -12,7 +12,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2021, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2023, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -44,6 +44,7 @@
 * so agrees to indemnify Cypress against all liability.
 *******************************************************************************/
 
+
 #include "cyhal.h"
 #include "cybsp.h"
 
@@ -63,7 +64,6 @@
 /* Middleware libraries */
 #include "cy_retarget_io.h"
 #include "cy_wcm.h"
-#include "cy_lwip.h"
 
 #include "cy_mqtt_api.h"
 #include "clock.h"
@@ -136,8 +136,10 @@ uint8_t *mqtt_network_buffer = NULL;
 static cy_rslt_t wifi_connect(void);
 static cy_rslt_t mqtt_init(void);
 static cy_rslt_t mqtt_connect(void);
+
 void mqtt_event_callback(cy_mqtt_t mqtt_handle, cy_mqtt_event_t event, void *user_data);
 static void cleanup(void);
+void print_heap_usage(char *msg);
 
 #if GENERATE_UNIQUE_CLIENT_ID
 static cy_rslt_t mqtt_get_unique_client_identifier(char *mqtt_client_identifier);
@@ -224,6 +226,8 @@ void mqtt_client_task(void *pvParameters)
         printf("Failed to create Publisher task!\n");
         goto exit_cleanup;
     }
+
+    print_heap_usage("mqtt_client_task: subscriber & publisher tasks created");
 
     while (true)
     {

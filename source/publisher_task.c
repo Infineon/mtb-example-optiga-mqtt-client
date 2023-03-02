@@ -11,7 +11,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2021, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2023, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -43,6 +43,7 @@
 * so agrees to indemnify Cypress against all liability.
 *******************************************************************************/
 
+
 #include "cyhal.h"
 #include "cybsp.h"
 #include "FreeRTOS.h"
@@ -63,7 +64,7 @@
 * Macros
 ******************************************************************************/
 /* Interrupt priority for User Button Input. */
-#define USER_BTN_INTR_PRIORITY          (5)
+#define USER_BTN_INTR_PRIORITY          (3)
 
 /* The maximum number of times each PUBLISH in this example will be retried. */
 #define PUBLISH_RETRY_LIMIT             (10)
@@ -77,6 +78,14 @@
  * publisher task.
  */
 #define PUBLISHER_TASK_QUEUE_LENGTH     (3u)
+
+/******************************************************************************
+* Function Prototypes
+*******************************************************************************/
+static void publisher_init(void);
+static void publisher_deinit(void);
+static void isr_button_press(void *callback_arg, cyhal_gpio_event_t event);
+void print_heap_usage(char *msg);
 
 /******************************************************************************
 * Global Variables
@@ -97,12 +106,12 @@ cy_mqtt_publish_info_t publish_info =
     .dup = false
 };
 
-/******************************************************************************
-* Function Prototypes
-*******************************************************************************/
-static void publisher_init(void);
-static void publisher_deinit(void);
-static void isr_button_press(void *callback_arg, cyhal_gpio_event_t event);
+/* Structure that stores the callback data for the GPIO interrupt event. */
+cyhal_gpio_callback_data_t cb_data =
+{
+    .callback = isr_button_press,
+    .callback_arg = NULL
+};
 
 /******************************************************************************
  * Function Name: publisher_task
@@ -181,6 +190,8 @@ void publisher_task(void *pvParameters)
                         mqtt_task_cmd = HANDLE_MQTT_PUBLISH_FAILURE;
                         xQueueSend(mqtt_task_q, &mqtt_task_cmd, portMAX_DELAY);
                     }
+
+                    print_heap_usage("publisher_task: After publishing an MQTT message");
                     break;
                 }
             }
@@ -207,7 +218,7 @@ static void publisher_init(void)
     /* Initialize the user button GPIO and register interrupt on falling edge. */
     cyhal_gpio_init(CYBSP_USER_BTN, CYHAL_GPIO_DIR_INPUT,
                     CYHAL_GPIO_DRIVE_PULLUP, CYBSP_BTN_OFF);
-    cyhal_gpio_register_callback(CYBSP_USER_BTN, isr_button_press, NULL);
+    cyhal_gpio_register_callback(CYBSP_USER_BTN, &cb_data);
     cyhal_gpio_enable_event(CYBSP_USER_BTN, CYHAL_GPIO_IRQ_FALL,
                             USER_BTN_INTR_PRIORITY, true);
     
@@ -232,7 +243,7 @@ static void publisher_init(void)
 static void publisher_deinit(void)
 {
     /* Deregister the ISR and disable the interrupt on the user button. */
-    cyhal_gpio_register_callback(CYBSP_USER_BTN, NULL, NULL);
+    cyhal_gpio_register_callback(CYBSP_USER_BTN, &cb_data);
     cyhal_gpio_enable_event(CYBSP_USER_BTN, CYHAL_GPIO_IRQ_FALL,
                             USER_BTN_INTR_PRIORITY, false);
     cyhal_gpio_free(CYBSP_USER_BTN);

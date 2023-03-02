@@ -1,5 +1,5 @@
 /******************************************************************************
-* File Name:   wifi_config.h
+* File Name: wifi_config.h
 *
 * Description: This file contains the configuration macros required for the
 *              Wi-Fi connection.
@@ -8,7 +8,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2021, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2023, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
