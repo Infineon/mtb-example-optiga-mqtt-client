@@ -27,11 +27,12 @@
 ################################################################################
 # Basic Configuration
 ################################################################################
-#Type of ModusToolbox Makefile Options include:
+
+# Type of ModusToolbox Makefile Options include:
 #
-#COMBINED    -- Top Level Makefile usually for single standalone application
-#APPLICATION -- Top Level Makefile usually for multi project application
-#PROJECT     -- Project Makefile under Application
+# COMBINED    -- Top Level Makefile usually for single standalone application
+# APPLICATION -- Top Level Makefile usually for multi project application
+# PROJECT     -- Project Makefile under Application
 #
 MTB_TYPE=COMBINED
 
@@ -68,6 +69,7 @@ CONFIG=Debug
 
 # If set to "true" or "1", display full command-lines when building.
 VERBOSE=
+
 
 ################################################################################
 # Advanced Configuration
@@ -114,12 +116,12 @@ DEFINES=$(MBEDTLSFLAGS) \
         CY_SECURE_SOCKETS_PKCS_SUPPORT
 
 # CY8CPROTO-062-4343W board shares the same GPIO for the user button (USER BTN1)
-# and the CYW4343W host wake up pin. Since this example uses the GPIO for  
+# and the CYW4343W host wake up pin. Since this example uses the GPIO for
 # interfacing with the user button, the SDIO interrupt to wake up the host is
 # disabled by setting CY_WIFI_HOST_WAKE_SW_FORCE to '0'.
-# 
-# If you wish to enable this host wake up feature, Comment DEFINES+=CY_WIFI_HOST_WAKE_SW_FORCE=0. 
-# If you want this feature on CY8CPROTO-062-4343W, change the GPIO pin for USER BTN 
+#
+# If you wish to enable this host wake up feature, Comment DEFINES+=CY_WIFI_HOST_WAKE_SW_FORCE=0.
+# If you want this feature on CY8CPROTO-062-4343W, change the GPIO pin for USER BTN
 # in design/hardware & Comment DEFINES+=CY_WIFI_HOST_WAKE_SW_FORCE=0.
 DEFINES+=CY_WIFI_HOST_WAKE_SW_FORCE=0
 
@@ -182,11 +184,13 @@ CY_GETLIBS_SHARED_PATH=../
 #
 CY_GETLIBS_SHARED_NAME=mtb_shared
 
-# Absolute path to the compiler's "bin" directory.
+# Absolute path to the compiler's "bin" directory. The variable name depends on the
+# toolchain used for the build. Refer to the ModusToolbox user guide to get the correct
+# variable name for the toolchain used in your build.
 #
 # The default depends on the selected TOOLCHAIN (GCC_ARM uses the ModusToolbox
 # software provided compiler by default).
-CY_COMPILER_PATH=
+CY_COMPILER_GCC_ARM_DIR=
 
 
 # Locate ModusToolbox helper tools folders in default installation
