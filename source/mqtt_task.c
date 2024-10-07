@@ -12,7 +12,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2023, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2024, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -90,6 +90,9 @@
 #define MQTT_INSTANCE_CREATED            (1lu << 4)
 #define MQTT_CONNECTION_SUCCESS          (1lu << 5)
 #define MQTT_MSG_RECEIVED                (1lu << 6)
+
+/*String that describes the MQTT handle that is being created in order to uniquely identify it*/
+#define MQTT_HANDLE_DESCRIPTOR            "MQTThandleID"
 
 /* Macro to check if the result of an operation was successful and set the 
  * corresponding bit in the status_flag based on 'init_mask' parameter. When 
@@ -426,12 +429,19 @@ static cy_rslt_t mqtt_init(void)
 
     /* Create the MQTT client instance. */
     result = cy_mqtt_create(mqtt_network_buffer, MQTT_NETWORK_BUFFER_SIZE,
-                            security_info, &broker_info,
-                            (cy_mqtt_callback_t)mqtt_event_callback, NULL,
+                            security_info, &broker_info,MQTT_HANDLE_DESCRIPTOR,
                             &mqtt_connection);
-    CHECK_RESULT(result, MQTT_INSTANCE_CREATED, "MQTT instance creation failed!\n\n");
-    printf("MQTT library initialization successful.\n\n");
-
+                            
+    CHECK_RESULT(result, MQTT_INSTANCE_CREATED, "\nMQTT instance creation failed!\n");
+    if(CY_RSLT_SUCCESS == result)
+    {
+        /* Register a MQTT event callback */
+        result = cy_mqtt_register_event_callback( mqtt_connection, (cy_mqtt_callback_t)mqtt_event_callback, NULL );
+        if(CY_RSLT_SUCCESS == result)
+        {       
+            printf("\nMQTT library initialization successful.\n");
+        }
+    }   
     return result;
 }
 
