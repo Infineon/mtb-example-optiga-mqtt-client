@@ -1,4 +1,6 @@
 $(SEARCH_aws-iot-device-sdk-embedded-C)/libraries/standard/coreHTTP
+$(SEARCH_secure-sockets)/source/pkcs11/COMPONENT_OPTIGA/
+$(SEARCH_secure-sockets)/source/COMPONENT_MBEDTLS/
 
 # Documentation
 documents
@@ -9,12 +11,16 @@ documents
 .vscode
 
 # Not required PALs
-$(SEARCH_optiga-trust-m)/pal/NEW_PAL_TEMPLATE
-$(SEARCH_optiga-trust-m)/pal/esp32_freertos
-$(SEARCH_optiga-trust-m)/pal/libusb
-$(SEARCH_optiga-trust-m)/pal/linux
-$(SEARCH_optiga-trust-m)/pal/xmc4800
-$(SEARCH_optiga-trust-m)/pal/xmc4800_freertos
+$(SEARCH_optiga-trust-m)/extras/pal/NEW_PAL_TEMPLATE
+$(SEARCH_optiga-trust-m)/extras/pal/esp32_freertos
+$(SEARCH_optiga-trust-m)/extras/pal/libusb
+$(SEARCH_optiga-trust-m)/extras/pal/linux
+$(SEARCH_optiga-trust-m)/extras/pal/xmc4800
+$(SEARCH_optiga-trust-m)/extras/pal/xmc4800_freertos
+$(SEARCH_optiga-trust-m)/extras/pal/zephyr
+$(SEARCH_optiga-trust-m)/extras/pal/test_pal
+$(SEARCH_optiga-trust-m)/extras/pal/linux_uart
+$(SEARCH_optiga-trust-m)/extras/pal/windows_uart
 
 $(SEARCH_cy-mbedtls-acceleration)/COMPONENT_CAT1/mbedtls_MXCRYPTO/ecdh_alt_mxcrypto.c
 $(SEARCH_cy-mbedtls-acceleration)/COMPONENT_CAT1/mbedtls_MXCRYPTO/ecdsa_alt_mxcrypto.c
@@ -22,11 +28,12 @@ $(SEARCH_cy-mbedtls-acceleration)/COMPONENT_CAT1/mbedtls_MXCRYPTO/ecp_alt_mxcryp
 $(SEARCH_cy-mbedtls-acceleration)/COMPONENT_CAT1/mbedtls_MXCRYPTO/ecp_curves_alt_mxcrypto.c
 
 # Not required Crypto midlayers
-$(SEARCH_optiga-trust-m)/pal/pal_crypt_openssl.c
-$(SEARCH_optiga-trust-m)/pal/pal_crypt_wolfssl.c
+$(SEARCH_optiga-trust-m)/extras/pal/pal_crypt_openssl.c
+$(SEARCH_optiga-trust-m)/extras/pal/pal_crypt_wolfssl.c
 
 # Not required executeable for tools
 $(SEARCH_optiga-trust-m)/examples/
+$(SEARCH_optiga-trust-m)/tests/
 
-# Add this line to your project if you already have mbedtls in your application
-$(SEARCH_optiga-trust-m)/externals/mbedtls
+# Not required MbedTLS folders
+$(SEARCH_optiga-trust-m)/external/mbedtls

@@ -11,7 +11,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2024, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2025, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -46,8 +46,8 @@
 /*******************************************************************************
  * Header file includes
  ******************************************************************************/
-#include "optiga/pal/pal_os_event.h"
-#include "optiga/pal/pal.h"
+#include "include/pal/pal_os_event.h"
+#include "include/pal/pal.h"
 
 #include "FreeRTOS.h"
 #include "timers.h"

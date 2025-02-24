@@ -13,7 +13,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2024, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2025, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -52,10 +52,10 @@
 #include "mbedtls/ecdh.h"
 
 #include <string.h>
-#include "optiga/optiga_crypt.h"
-#include "optiga/optiga_util.h"
-#include "optiga/pal/pal_os_timer.h"
-#include "optiga/common/optiga_lib_common.h"
+#include "include/optiga_crypt.h"
+#include "include/optiga_util.h"
+#include "include/pal/pal_os_timer.h"
+#include "include/common/optiga_lib_common.h"
 
 #define PRINT_ECDH_PUBLICKEY   0
 

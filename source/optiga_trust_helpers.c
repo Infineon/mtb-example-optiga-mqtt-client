@@ -8,7 +8,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2024, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2025, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -42,12 +42,12 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "optiga/optiga_util.h"
-#include "optiga/common/optiga_lib_logger.h"
-#include "optiga/pal/pal_os_event.h"
-#include "optiga/pal/pal_gpio.h"
-#include "optiga/ifx_i2c/ifx_i2c_config.h"
-#include "optiga/pal/pal_ifx_i2c_config.h"
+#include "include/optiga_util.h"
+#include "include/common/optiga_lib_logger.h"
+#include "include/pal/pal_os_event.h"
+#include "include/pal/pal_gpio.h"
+#include "include/ifx_i2c/ifx_i2c_config.h"
+#include "include/pal/pal_ifx_i2c_config.h"
 #include "mbedtls/base64.h"
 #include "optiga_trust_helpers.h"
 

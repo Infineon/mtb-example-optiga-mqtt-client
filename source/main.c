@@ -7,7 +7,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2024, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2025, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -50,8 +50,8 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-#include "optiga/pal/pal_os_event.h"
-#include "optiga/pal/pal_i2c.h"
+#include "include/pal/pal_os_event.h"
+#include "include/pal/pal_i2c.h"
 #include "optiga_trust_helpers.h"
 
 /******************************************************************************
@@ -81,8 +81,8 @@ extern void use_optiga_certificate(void);
 
 void optiga_client_task(void *pvParameters)
 {
-    char optiga_cert_pem[1024];
-    uint16_t optiga_cert_pem_size = 1024;
+    char optiga_cert_pem[1200];
+    uint16_t optiga_cert_pem_size = 1200;
 
     printf("\x1b[2J\x1b[;H");
     optiga_trust_init();

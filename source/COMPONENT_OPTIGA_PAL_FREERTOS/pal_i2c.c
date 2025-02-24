@@ -9,7 +9,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2024, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2025, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -44,7 +44,7 @@
 /*******************************************************************************
  * Header file includes
  ******************************************************************************/
-#include "optiga/pal/pal_i2c.h"
+#include "include/pal/pal_i2c.h"
 #include "pal_psoc_i2c_mapping.h"
 #include "cy_pdl.h"
 #include "cyhal.h"
